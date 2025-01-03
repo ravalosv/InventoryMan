@@ -1,7 +1,6 @@
 ﻿using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using InventoryMan.Infrastructure.Data.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace InventoryMan.Infrastructure.Repositories
 {

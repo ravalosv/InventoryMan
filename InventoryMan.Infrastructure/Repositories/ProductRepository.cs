@@ -1,9 +1,7 @@
 ﻿using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using InventoryMan.Infrastructure.Data.Context;
-using InventoryMan.Infrastructure.Data.Pagination;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace InventoryMan.Infrastructure.Repositories
 {

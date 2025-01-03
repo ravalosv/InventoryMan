@@ -25,20 +25,6 @@ namespace InventoryMan.Infrastructure.Repositories
                 .Where(i => i.Quantity <= i.MinStock)
                 .ToListAsync();
         }
-
-        public override async Task<Core.Entities.Inventory?> GetByIdAsync(string id)
-        {
-            return await _dbSet
-                .Include(i => i.Product)
-                .FirstOrDefaultAsync(i => i.Id == id);
-        }
-
-        public override async Task<IEnumerable<Core.Entities.Inventory>> GetAllAsync()
-        {
-            return await _dbSet
-                .Include(i => i.Product)
-                .ToListAsync();
-        }
     }
 
 }

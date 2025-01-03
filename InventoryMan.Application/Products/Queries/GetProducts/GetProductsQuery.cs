@@ -116,10 +116,6 @@ namespace InventoryMan.Application.Products.Queries.GetProducts
                 _ => _unitOfWork.Products.Query().OrderBy(p => p.Name)
             };
         }
-
-
-
-
     }
 }
 

@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using InventoryMan.Application.Common;
 using InventoryMan.Application.Common.Models;
-using InventoryMan.Application.Products.Commands.CreateProduct;
 using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using MediatR;
