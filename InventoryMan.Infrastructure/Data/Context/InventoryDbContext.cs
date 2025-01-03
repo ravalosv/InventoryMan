@@ -43,9 +43,9 @@ namespace InventoryMan.Infrastructure.Data.Context
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Product)
-                      .WithMany()
-                      .HasForeignKey(e => e.ProductId);
+                //entity.HasOne(e => e.Product)
+                //      .WithMany()
+                //      .HasForeignKey(e => e.ProductId);
                 entity.HasIndex(e => new { e.ProductId, e.StoreId }).IsUnique();
             });
 
@@ -86,13 +86,13 @@ namespace InventoryMan.Infrastructure.Data.Context
             );
 
             modelBuilder.Entity<Store>().HasData(
-                new Store { Id = Guid.NewGuid().ToString(), Name = "Store 1", Address = "Address 1", Phone = "123456789" },
-                new Store { Id = Guid.NewGuid().ToString(), Name = "Store 2", Address = "Address 2", Phone = "987654321" }
+                new Store { Id = "859251b6-f0fc-480d-87f2-edd3de9bc817", Name = "Store 1", Address = "Address 1", Phone = "123456789" },
+                new Store { Id = "5f7b74c4-1ff7-4c7e-b54d-54f3d382b7d1", Name = "Store 2", Address = "Address 2", Phone = "987654321" }
             );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { Id = Guid.NewGuid().ToString(), CategoryId = 1, Description = "Producto electrónico versátil", Name = "Smartphone X1", Price = 299.99m, Sku = "SMRT001" },
-                new Product { Id = Guid.NewGuid().ToString(), CategoryId = 2, Description = "Accesorio deportivo premium", Name = "Reloj Deportivo Pro", Price = 149.99m, Sku = "SPRT002" },
+                new Product { Id = "18b43125-e3f2-435a-98f5-d70314cc8824", CategoryId = 1, Description = "Producto electrónico versátil", Name = "Smartphone X1", Price = 299.99m, Sku = "SMRT001" },
+                new Product { Id = "2948aa32-2d99-4467-8b22-b7f70d7d5a3d", CategoryId = 2, Description = "Accesorio deportivo premium", Name = "Reloj Deportivo Pro", Price = 149.99m, Sku = "SPRT002" },
                 new Product { Id = Guid.NewGuid().ToString(), CategoryId = 1, Description = "Audio de alta calidad", Name = "Auriculares Wireless", Price = 89.99m, Sku = "AUDIO003" },
                 new Product { Id = Guid.NewGuid().ToString(), CategoryId = 2, Description = "Equipo fitness resistente", Name = "Pesas Ajustables", Price = 199.99m, Sku = "FIT004" },
                 new Product { Id = Guid.NewGuid().ToString(), CategoryId = 1, Description = "Tablet última generación", Name = "Tablet Pro 10", Price = 399.99m, Sku = "TAB005" },

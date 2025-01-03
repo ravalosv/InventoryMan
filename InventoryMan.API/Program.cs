@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using InventoryMan.Core.Interfaces;
-using InventoryMan.Application.Products.Commands.CreateProduct;
 using System.Text.Json.Serialization;
-using InventoryMan.Infrastructure.Repositories;
 using InventoryMan.Infrastructure.Data.Context;
 
 

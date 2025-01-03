@@ -31,7 +31,7 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                 try
                 {
 
-                    var inventory = await _unitOfWork.Inventories
+                    var sInventory = await _unitOfWork.Inventories
                         .GetByStoreIdAsync(request.StoreId)
                         .ContinueWith(t => t.Result.FirstOrDefault(i => i.ProductId == request.ProductId));
 
@@ -42,16 +42,16 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                         inventoryQuantity = request.Quantity * -1;
                     }
 
-                    if (inventory == null)
+                    if (sInventory == null)
                     {
                         // Si no existe inventario actualmente
                         // Validar que el tipo de movimiento no sea OUT
-                        if(request.MovementType == MovementType.OUT)
+                        if(request.MovementType == MovementType.OUT || inventoryQuantity <= 0)
                         {
                             throw new Exception("There is not enough inventory");
                         }
 
-                        inventory = new Core.Entities.Inventory
+                        sInventory = new Core.Entities.Inventory
                         {
                             Id = Guid.NewGuid().ToString(),
                             ProductId = request.ProductId,
@@ -60,23 +60,23 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                             MinStock = 0
                         };
 
-                        await _unitOfWork.Inventories.AddAsync(inventory);
+                        await _unitOfWork.Inventories.AddAsync(sInventory);
                     }
                     else
-                    {                     
-                        inventory.Quantity += inventoryQuantity;
-
-                        await _unitOfWork.Inventories.UpdateAsync(inventory);
-                    }
-
-
-                    // Validar que no se esté sacando mas mercancia de la que hay en inventario
-                    if (inventory.Quantity < 0)
                     {
-                        throw new Exception("There is not enough inventory");
+
+                        if (request.MovementType == MovementType.OUT && sInventory.Quantity < request.Quantity)
+                        {
+                            throw new Exception("There is not enough inventory");
+                        }
+
+                        sInventory.Quantity += inventoryQuantity;
+
+                        // Validar que no se esté sacando mas mercancia de la que hay en inventario
+
+
+                        await _unitOfWork.Inventories.UpdateAsync(sInventory);
                     }
-
-
                     var movement = new Movement
                     {
                         Id = Guid.NewGuid().ToString(),

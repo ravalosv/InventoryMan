@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryMan.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20250102032523_MakeSourceStoreIdNullable")]
-    partial class MakeSourceStoreIdNullable
+    [Migration("20250103064935_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,9 +37,6 @@ namespace InventoryMan.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ProductId1")
-                        .HasColumnType("text");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
@@ -48,8 +45,6 @@ namespace InventoryMan.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId1");
 
                     b.HasIndex("StoreId");
 
@@ -127,7 +122,7 @@ namespace InventoryMan.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0d6c0b1c-8ec5-43f9-ab79-cb1cb07a4633",
+                            Id = "a177f35e-1d05-4185-9db7-53cc1a51cd63",
                             CategoryId = 1,
                             Description = "Producto electrónico versátil",
                             Name = "Smartphone X1",
@@ -136,7 +131,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "e437797b-a50d-49b7-ac30-dbafc9de7b00",
+                            Id = "2d492c20-9142-4b48-9a3e-a40248bff6c9",
                             CategoryId = 2,
                             Description = "Accesorio deportivo premium",
                             Name = "Reloj Deportivo Pro",
@@ -145,7 +140,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "fbf15bde-4f87-4de3-bcc9-77f6926c6fb7",
+                            Id = "3eb60abe-615e-438f-9e23-dc9081d545fb",
                             CategoryId = 1,
                             Description = "Audio de alta calidad",
                             Name = "Auriculares Wireless",
@@ -154,7 +149,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "6e740613-898c-4ad0-bd36-5c4d7da06355",
+                            Id = "60f92368-1856-4080-a722-7ac4e4d285a1",
                             CategoryId = 2,
                             Description = "Equipo fitness resistente",
                             Name = "Pesas Ajustables",
@@ -163,7 +158,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "38d7f3e0-eaa4-4c84-b681-9b998d89a3f2",
+                            Id = "591d74d8-5697-4a1c-a20f-e746cc9236db",
                             CategoryId = 1,
                             Description = "Tablet última generación",
                             Name = "Tablet Pro 10",
@@ -172,7 +167,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "2f4a4232-03fb-4567-a2aa-a8f14ea855c0",
+                            Id = "d16c3aba-c08b-41cf-8e30-0ecfb035ad2d",
                             CategoryId = 2,
                             Description = "Equipamiento deportivo",
                             Name = "Balón Profesional",
@@ -181,7 +176,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "313cef05-2dbc-49e5-a4a9-12634e690ea9",
+                            Id = "fdaac353-77f4-4984-8856-b192147355a9",
                             CategoryId = 1,
                             Description = "Cámara compacta HD",
                             Name = "Cámara Digital X20",
@@ -190,7 +185,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "d10cd842-4701-4740-8360-9798aff0bc02",
+                            Id = "531d603f-0a07-4074-a0ec-92d9d4c5f7a0",
                             CategoryId = 2,
                             Description = "Ropa deportiva premium",
                             Name = "Camiseta Tech-Fit",
@@ -199,7 +194,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "54dcb400-f938-49e9-bfe9-6333223ee0e3",
+                            Id = "b6a559c6-8765-4bbf-a9ee-0f5edfc42d32",
                             CategoryId = 1,
                             Description = "Altavoz potente",
                             Name = "Speaker Bluetooth",
@@ -208,7 +203,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "d5550587-53dd-40a3-b9e4-cec7e025cf49",
+                            Id = "4754213a-7302-4d51-a9ba-cb35b96fd816",
                             CategoryId = 2,
                             Description = "Calzado deportivo",
                             Name = "Zapatillas Pro-Run",
@@ -217,7 +212,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "fe27957f-1b98-4511-a4e2-562ecaa934ba",
+                            Id = "958e3313-d442-4905-916c-586c36fe13fa",
                             CategoryId = 1,
                             Description = "Smartwatch avanzado",
                             Name = "Reloj Smart V2",
@@ -226,7 +221,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "d7dca7fc-752f-4cf6-b21b-a95019043f4d",
+                            Id = "1bd341ed-eda7-4705-b194-3389cc669379",
                             CategoryId = 2,
                             Description = "Equipo de entrenamiento",
                             Name = "Banda Elástica Pro",
@@ -235,7 +230,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "7f689459-9ec4-44aa-bb3b-e1d51964bba3",
+                            Id = "78167a58-c0e7-4c69-bdd4-082393605df5",
                             CategoryId = 1,
                             Description = "Teclado gaming",
                             Name = "Teclado RGB Pro",
@@ -244,7 +239,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "69ec9f3e-10b6-4f82-8b7c-cbcea99efa6b",
+                            Id = "88ed405b-3170-49e8-987b-765affbfe0b3",
                             CategoryId = 2,
                             Description = "Accesorio yoga",
                             Name = "Mat Premium",
@@ -253,7 +248,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "0b7ab78e-e6a6-4213-aa7c-f3acdf300fed",
+                            Id = "6b4dc4a0-9f8e-4c46-a81d-285d7439b5d6",
                             CategoryId = 1,
                             Description = "Mouse gaming",
                             Name = "Mouse Gamer X",
@@ -262,7 +257,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "7ef3e963-2282-4a66-b6c0-8a5b7a5985c3",
+                            Id = "8ae3adfa-5e62-4215-8610-244701336ab7",
                             CategoryId = 2,
                             Description = "Botella deportiva",
                             Name = "Botella Térmica",
@@ -271,7 +266,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "86ae25c6-e87b-4417-bcb0-917fbadf4a56",
+                            Id = "00bb8276-4385-4c5a-b0bf-63b5181c83aa",
                             CategoryId = 1,
                             Description = "Webcam HD",
                             Name = "Webcam Pro 4K",
@@ -280,7 +275,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "f0b43c75-3957-4316-be8e-9da31bea2bf1",
+                            Id = "9abda882-d75d-453c-b44c-3210bbfa7dd5",
                             CategoryId = 2,
                             Description = "Mochila deportiva",
                             Name = "Mochila Sport Pro",
@@ -289,7 +284,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "53559aa8-c451-4d72-a406-9944dcf5f872",
+                            Id = "3dbbea4d-47ad-4b87-92c7-c9ef86cc13f2",
                             CategoryId = 1,
                             Description = "Batería portátil",
                             Name = "PowerBank 20000",
@@ -298,7 +293,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "9c862fb8-091b-40f7-b797-072b3950f334",
+                            Id = "e683209c-aed1-40d0-a6f2-2459ed1138a1",
                             CategoryId = 2,
                             Description = "Guantes fitness",
                             Name = "Guantes Pro-Lift",
@@ -307,7 +302,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "aa02b357-ebca-4f5b-a9d6-1d2ced2d28db",
+                            Id = "1db82939-f5ce-4f25-9eeb-8e856e758d91",
                             CategoryId = 1,
                             Description = "Hub USB",
                             Name = "USB Hub 4-Port",
@@ -316,7 +311,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "38185f0d-84b3-410a-b63f-f293f28ea121",
+                            Id = "9d6f3e06-9a0a-47fe-a5d5-fb9dd670f95e",
                             CategoryId = 2,
                             Description = "Toalla deportiva",
                             Name = "Toalla Microfibra",
@@ -325,7 +320,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "3dcc00cf-6899-4e7a-958e-12ae7b9d26c6",
+                            Id = "c54d10ba-410c-4214-970d-dd4d36b45da1",
                             CategoryId = 1,
                             Description = "Soporte laptop",
                             Name = "Soporte Ergonómico",
@@ -334,7 +329,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "47df651e-b686-46bc-8599-bce83f751826",
+                            Id = "2c2bc398-6c45-4b3b-9814-cae92100f875",
                             CategoryId = 2,
                             Description = "Bolsa deporte",
                             Name = "Bolsa Gym Pro",
@@ -343,7 +338,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "c95caeae-e7d1-4171-900a-a4e8e9500911",
+                            Id = "94bdecb3-c518-4faa-9f2c-3a9bfe098c00",
                             CategoryId = 1,
                             Description = "Cable HDMI",
                             Name = "HDMI Premium 2m",
@@ -352,7 +347,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "86602d11-26d9-41ae-b99a-e8d1656fec59",
+                            Id = "ba59b6d2-b0d1-4eae-b64b-1fd835133f83",
                             CategoryId = 2,
                             Description = "Banda cardio",
                             Name = "Monitor Cardíaco",
@@ -361,7 +356,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "ab1ffcbc-3bc9-4818-93db-0cdc33e15cf9",
+                            Id = "5913e21b-b218-4f92-964e-70ba2ddce88c",
                             CategoryId = 1,
                             Description = "Funda tablet",
                             Name = "Funda Protectora",
@@ -370,7 +365,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "592f8943-0cec-404a-ad6c-8d8ad9a1c0c9",
+                            Id = "fbb4230f-cf9d-4eec-b9e6-93b266372e9f",
                             CategoryId = 2,
                             Description = "Rodilleras pro",
                             Name = "Rodilleras Sport",
@@ -379,7 +374,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "9e234d91-48a0-4d8f-8d1a-a5953645aa8c",
+                            Id = "47770dd4-248c-48e5-95d4-5e5bdedcf7f7",
                             CategoryId = 1,
                             Description = "Adaptador wifi",
                             Name = "WiFi Adapter Pro",
@@ -388,7 +383,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "aa2cc449-12b7-4368-a1c0-7e903b34d7b7",
+                            Id = "67565054-b183-4d07-b2f5-ec35d0ee3b69",
                             CategoryId = 2,
                             Description = "Cuerda saltar",
                             Name = "Cuerda Pro-Jump",
@@ -397,7 +392,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "eb5664a6-d60e-4bf2-b126-cc03b8cebba4",
+                            Id = "9ddecdab-9eaa-40ff-8cb1-499cc31cc645",
                             CategoryId = 1,
                             Description = "Luz LED USB",
                             Name = "LED Light Strip",
@@ -406,7 +401,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "5c077915-d11b-4bc2-b457-1cfcd832433b",
+                            Id = "50da2d59-02f7-4343-8c61-85b6eb2e6416",
                             CategoryId = 2,
                             Description = "Banda cabeza",
                             Name = "Banda Deportiva",
@@ -415,7 +410,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "d7b6f0a6-85d4-4d4e-9d4b-b53860dc2818",
+                            Id = "5b8df2cf-c6f0-4291-83fc-e34a0a6b1304",
                             CategoryId = 1,
                             Description = "Protector pantalla",
                             Name = "Screen Guard Pro",
@@ -424,7 +419,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "e69b8998-591b-4ea8-9ad4-dd10e82b1db8",
+                            Id = "ea185c87-a647-49bf-bce0-497b501e1701",
                             CategoryId = 2,
                             Description = "Botella shake",
                             Name = "Shaker Pro",
@@ -433,7 +428,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "ebc08450-b886-461d-8779-de75e8b6fdcd",
+                            Id = "6e04c586-7bdb-46ec-9cf4-ec4951a5bc5a",
                             CategoryId = 1,
                             Description = "Soporte móvil",
                             Name = "Phone Stand",
@@ -442,7 +437,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "eae58d0d-0b01-43a1-9788-20d9a5488582",
+                            Id = "09e93d66-76c4-4e92-88da-6b6a6c2845ed",
                             CategoryId = 2,
                             Description = "Muñequeras",
                             Name = "Wrist Support",
@@ -451,7 +446,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "e51fd9e2-321f-4034-b367-f46caa496d76",
+                            Id = "5a71b745-2327-4897-a3bd-534763c9778b",
                             CategoryId = 1,
                             Description = "Limpiador pantalla",
                             Name = "Screen Cleaner",
@@ -460,7 +455,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "469b2a7b-5b79-4bf6-94ee-2fc8e78b5693",
+                            Id = "2e34be53-22a2-4391-b69d-ebaa93fda91a",
                             CategoryId = 2,
                             Description = "Bolsa zapatos",
                             Name = "Shoe Bag Sport",
@@ -469,7 +464,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "fd38c9da-294e-47d1-972e-ccb291cb662f",
+                            Id = "1e52119c-c91f-4650-a6cc-4175dffdecb8",
                             CategoryId = 1,
                             Description = "Organizador cables",
                             Name = "Cable Manager",
@@ -478,7 +473,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "2df90ae5-ecf4-472e-8160-912085301b6b",
+                            Id = "47a483fc-ec63-46cb-8b14-3bcd1a7d9aba",
                             CategoryId = 2,
                             Description = "Toalla pequeña",
                             Name = "Mini Towel",
@@ -487,7 +482,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "7e207deb-1b59-4022-bd3a-43c8039ccf26",
+                            Id = "6362dc1b-9d03-4076-9d61-d925fd75a64b",
                             CategoryId = 1,
                             Description = "Protector cable",
                             Name = "Cable Protector",
@@ -496,7 +491,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "c602d430-c67d-4a53-9e9d-d8abec6dcca4",
+                            Id = "69fde627-996e-4c3d-98a7-e07720d4b4a3",
                             CategoryId = 2,
                             Description = "Banda medición",
                             Name = "Measure Tape",
@@ -505,7 +500,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "d22e4664-051a-4311-b94b-6942aaaf058a",
+                            Id = "2f4b8631-cf65-416a-9e88-04e494051cec",
                             CategoryId = 1,
                             Description = "Mini ventilador",
                             Name = "USB Fan",
@@ -514,7 +509,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "7313da1e-0152-4b11-90bc-aeccbc1406f8",
+                            Id = "f5606e42-12df-45b5-9a28-79f156103f59",
                             CategoryId = 2,
                             Description = "Candado gym",
                             Name = "Gym Lock",
@@ -523,7 +518,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "f8a2a33d-c329-4f73-a92a-840d84df3124",
+                            Id = "a317bc38-7b1b-473c-a49f-24a2f0704dfa",
                             CategoryId = 1,
                             Description = "Almohadilla mouse",
                             Name = "Mouse Pad Pro",
@@ -532,7 +527,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "c3710ece-665a-4446-be66-69231df238c5",
+                            Id = "1bc7071f-16cf-46f3-9362-219bcf6cb67c",
                             CategoryId = 2,
                             Description = "Banda resistencia",
                             Name = "Resistance Band",
@@ -541,7 +536,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "fc87091d-a009-4220-9e51-19fe90a397ab",
+                            Id = "fe135bab-8bfa-47f2-b1b5-b35652a67fdb",
                             CategoryId = 1,
                             Description = "Soporte tablet",
                             Name = "Tablet Mount",
@@ -550,7 +545,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "37ace985-1e6c-4046-9da2-ac80fd72f119",
+                            Id = "3a4181b4-cecf-45c1-94e8-6a1664789521",
                             CategoryId = 2,
                             Description = "Bolsa agua",
                             Name = "Water Bag",
@@ -559,7 +554,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "b6c40a56-a274-42d4-b19e-213ce39b4168",
+                            Id = "2b407211-b97a-446b-b4fd-11e4f12bae09",
                             CategoryId = 1,
                             Description = "Hub cargador",
                             Name = "Charging Hub",
@@ -568,7 +563,7 @@ namespace InventoryMan.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = "823554d1-7d56-415b-a2a3-6fffe92bbeb5",
+                            Id = "2b40099a-f712-46c1-9c53-3428a59a2dce",
                             CategoryId = 2,
                             Description = "Timer digital",
                             Name = "Sport Timer",
@@ -630,14 +625,14 @@ namespace InventoryMan.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e10fa0c7-aae4-4c51-95c8-1377f8d7be42",
+                            Id = "15617380-1ce6-4a3d-9214-81dc79b6557b",
                             Address = "Address 1",
                             Name = "Store 1",
                             Phone = "123456789"
                         },
                         new
                         {
-                            Id = "fac7ead9-cda9-4e80-9289-47b67d915b2b",
+                            Id = "1390508a-e79a-451f-8be7-975a9b6a2283",
                             Address = "Address 2",
                             Name = "Store 2",
                             Phone = "987654321"
@@ -647,14 +642,10 @@ namespace InventoryMan.Infrastructure.Migrations
             modelBuilder.Entity("InventoryMan.Core.Entities.Inventory", b =>
                 {
                     b.HasOne("InventoryMan.Core.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("Inventories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryMan.Core.Entities.Product", null)
-                        .WithMany("Inventories")
-                        .HasForeignKey("ProductId1");
 
                     b.HasOne("InventoryMan.Core.Entities.Store", "Store")
                         .WithMany("Inventories")

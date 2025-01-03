@@ -1,8 +1,7 @@
-﻿using InventoryMan.Application.Inventory.Commands.UpdateStock;
-using InventoryMan.Application.Inventory.Queries.GetInventoryByStore;
-using InventoryMan.Application.Inventory.Queries.GetLowStockItems;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using InventoryMan.Application.Inventory.Commands.UpdateStock;
+using InventoryMan.Application.Inventory.Queries.GetLowStockItems;
 
 namespace InventoryMan.API.Controllers
 {
