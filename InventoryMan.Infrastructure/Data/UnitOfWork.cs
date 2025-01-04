@@ -12,7 +12,6 @@ namespace InventoryMan.Infrastructure.Data
         private IProductRepository _productRepository;
         private IInventoryRepository _inventoryRepository;
         private IMovementRepository _movementRepository;
-        private ITestRepository _testRepository;
         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(InventoryDbContext context)
@@ -28,10 +27,6 @@ namespace InventoryMan.Infrastructure.Data
 
         public IMovementRepository Movements =>
             _movementRepository ??= new MovementRepository(_context);
-
-        public ITestRepository Tests =>
-            _testRepository ??= new TestRepository(_context);
-
 
         public async Task<int> SaveChangesAsync()
         {

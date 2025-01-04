@@ -14,18 +14,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryMan.Application.UnitTests", "InventoryMan.Application.UnitTests\InventoryMan.Application.UnitTests.csproj", "{B8358EEE-B8B1-4A04-8596-F5968F326F92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6FDF2E17-9A2F-4C9F-8425-072F79972D96}"
-	ProjectSection(SolutionItems) = preProject
-		load-test.js = load-test.js
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4383A5E5-8DB2-4A86-A430-9524C4C34A3A}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yaml = docker-compose.yaml
-	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryMan.Infrastructure.UnitTests", "InventoryMan.Infrastructure.UnitTests\InventoryMan.Infrastructure.UnitTests.csproj", "{6FA8F787-09CD-445C-9496-7CD47EF7353E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryMan.Infrastructure.UnitTests", "InventoryMan.Infrastructure.UnitTests\InventoryMan.Infrastructure.UnitTests.csproj", "{6FA8F787-09CD-445C-9496-7CD47EF7353E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryMan.IntegrationTests", "InventoryMan.IntegrationTests\InventoryMan.IntegrationTests.csproj", "{2C2A7417-C108-4942-8446-61ECA6AB6740}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryMan.IntegrationTests", "InventoryMan.IntegrationTests\InventoryMan.IntegrationTests.csproj", "{2C2A7417-C108-4942-8446-61ECA6AB6740}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

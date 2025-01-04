@@ -1,21 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using InventoryMan.Infrastructure.Data.Context;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(8080);  // Cambiado de 80 a 8080
-    serverOptions.ListenAnyIP(8443, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    }); // Cambiado de 443 a 8443
-});
-
 
 // Add services to the container.
 
@@ -33,10 +21,8 @@ builder.Services.AddSwaggerGen();
 
 
 // Database configuration
-var mySqlConnectionStr = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddDbContext<InventoryDbContext>(options =>
-    options.UseNpgsql(mySqlConnectionStr));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
