@@ -2,7 +2,7 @@
 
 namespace InventoryMan.Core.Interfaces
 {
-    public interface IMovementRepository : IRepository<Movement>
+    public interface ITestRepository: IRepository<Test>
     {
     }
 }
