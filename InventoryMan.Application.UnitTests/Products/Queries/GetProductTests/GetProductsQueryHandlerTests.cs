@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using InventoryMan.Application.Common.DTOs;
-using InventoryMan.Application.Common.Models;
 using InventoryMan.Application.Products.Queries.GetProducts;
 using System.Linq.Dynamic.Core;
 

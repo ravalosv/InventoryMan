@@ -20,6 +20,7 @@ namespace InventoryMan.Infrastructure.Data.Context
         public DbSet<Movement> Movements { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Store> Stores { get; set; }
+        public DbSet<Test> Test { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -80,6 +81,7 @@ namespace InventoryMan.Infrastructure.Data.Context
                       .HasForeignKey(e => e.StoreId);
             });
 
+            // Some data for testing
             modelBuilder.Entity<ProductCategory>().HasData(
                 new ProductCategory { Id = 1, Name = "Electrónicos y accesorios tecnológicos" },
                 new ProductCategory { Id = 2, Name = "Deportivos y fitness" }
@@ -88,6 +90,11 @@ namespace InventoryMan.Infrastructure.Data.Context
             modelBuilder.Entity<Store>().HasData(
                 new Store { Id = "859251b6-f0fc-480d-87f2-edd3de9bc817", Name = "Store 1", Address = "Address 1", Phone = "123456789" },
                 new Store { Id = "5f7b74c4-1ff7-4c7e-b54d-54f3d382b7d1", Name = "Store 2", Address = "Address 2", Phone = "987654321" }
+            );
+
+            //Access to DB it's working
+            modelBuilder.Entity<Test>().HasData(
+                new Test { Id = 1, Data = "Access to DB it's working" }
             );
 
             modelBuilder.Entity<Product>().HasData(

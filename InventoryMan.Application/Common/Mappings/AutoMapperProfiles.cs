@@ -12,6 +12,8 @@ namespace InventoryMan.Application.Common.Mappings
             CreateMap<Product, ProductDto>()
                 .ForMember(p => p.CategoryName, opc => opc.MapFrom(p => p.Category.Name));
 
+            CreateMap<Core.Entities.Test, TestDto>();
+
             CreateMap<PagedResult<Product>, List<ProductDto>>()
                 .ConvertUsing<PagedResultToListConverter<Product, ProductDto>>();
         }
