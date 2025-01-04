@@ -96,6 +96,11 @@ namespace InventoryMan.Infrastructure.Data.Context
                 new Test { Id = 1, Data = "Database connection successfully established" }
             );
 
+            //Access to DB it's working
+            modelBuilder.Entity<Test>().HasData(
+                new Test { Id = 1, Data = "Access to DB it's working" }
+            );
+
             modelBuilder.Entity<Product>().HasData(
                 new Product { Id = "ELEC-SMART-001", CategoryId = 1, Description = "Producto electrónico versátil", Name = "Smartphone X1", Price = 299.99m, Sku = "SMRT001" },
                 new Product { Id = "SPRT-WATCH-001", CategoryId = 2, Description = "Accesorio deportivo premium", Name = "Reloj Deportivo Pro", Price = 149.99m, Sku = "SPRT002" },
