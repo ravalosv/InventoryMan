@@ -1,5 +1,4 @@
 ﻿using Moq;
-using AutoMapper;
 using FluentAssertions;
 using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
@@ -12,14 +11,12 @@ namespace InventoryMan.Application.UnitTests.Products.Queries.GetProductTests
     public class GetProductByIdQueryTests
     {
         private readonly GetProductByIdQueryHandler _handler;
-        private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
 
         public GetProductByIdQueryTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _mockMapper = new Mock<IMapper>();
-            _handler = new GetProductByIdQueryHandler(_unitOfWorkMock.Object, _mockMapper.Object);
+            _handler = new GetProductByIdQueryHandler(_unitOfWorkMock.Object);
         }
 
         [Fact]
@@ -37,22 +34,6 @@ namespace InventoryMan.Application.UnitTests.Products.Queries.GetProductTests
                 Price = 99.99m,
                 Sku = "SKU123"
             };
-
-            var productDtot = new ProductDto
-            {
-                Id = productId,
-                Name = "Test Product",
-                Description = "Test Description",
-                CategoryId = 1,
-                CategoryName = "Test Category",
-                Price = 99.99m,
-                Sku = "SKU123"
-            };
-
-
-            _mockMapper
-                .Setup(m => m.Map<ProductDto>(It.IsAny<Product>()))
-                .Returns(productDtot);
 
             _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(productId))
                 .ReturnsAsync(product);
@@ -100,6 +81,35 @@ namespace InventoryMan.Application.UnitTests.Products.Queries.GetProductTests
             _unitOfWorkMock.Verify(uow => uow.Products.GetByIdAsync(nonExistentId), Times.Once);
         }
 
+        [Fact]
+        public async Task Handle_ProductWithNullCategory_ShouldReturnProductDtoWithNullCategoryName()
+        {
+            // Arrange
+            var productId = Guid.NewGuid().ToString();
+            var product = new Product
+            {
+                Id = productId,
+                Name = "Test Product",
+                Description = "Test Description",
+                CategoryId = 1,
+                Category = null,
+                Price = 99.99m,
+                Sku = "SKU123"
+            };
+
+            _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(productId))
+                .ReturnsAsync(product);
+
+            var query = new GetProductByIdQuery(productId);
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data.CategoryName.Should().BeNull();
+        }
 
         [Theory]
         [InlineData("")]
@@ -155,25 +165,8 @@ namespace InventoryMan.Application.UnitTests.Products.Queries.GetProductTests
                 Sku = null
             };
 
-            var productDtot = new ProductDto
-            {
-                Id = productId,
-                Name = null,
-                Description = null,
-                CategoryId = 0,
-                CategoryName = null,
-                Price = 0,
-                Sku = null
-            };
-
-
             _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(productId))
                 .ReturnsAsync(product);
-
-            _mockMapper
-                .Setup(m => m.Map<ProductDto>(It.IsAny<Product>()))
-                .Returns(productDtot);
-
 
             var query = new GetProductByIdQuery(productId);
 
@@ -192,6 +185,35 @@ namespace InventoryMan.Application.UnitTests.Products.Queries.GetProductTests
             result.Data.Sku.Should().BeNull();
         }
 
+        [Fact]
+        public async Task Handle_ValidIdWithSpecialCharacters_ShouldReturnProduct()
+        {
+            // Arrange
+            var productId = "test-123_456";
+            var product = new Product
+            {
+                Id = productId,
+                Name = "Test Product",
+                Description = "Test Description",
+                CategoryId = 1,
+                Category = new ProductCategory { Id = 1, Name = "Test Category" },
+                Price = 99.99m,
+                Sku = "SKU123"
+            };
+
+            _unitOfWorkMock.Setup(uow => uow.Products.GetByIdAsync(productId))
+                .ReturnsAsync(product);
+
+            var query = new GetProductByIdQuery(productId);
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data.Id.Should().Be(productId);
+        }
     }
 
 
