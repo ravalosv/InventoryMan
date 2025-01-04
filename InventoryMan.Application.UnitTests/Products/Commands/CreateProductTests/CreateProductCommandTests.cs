@@ -26,6 +26,7 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
             // Arrange
             var command = new CreateProductCommand
             {
+                Id = "123",
                 Name = "Test Product",
                 Description = "Test Description",
                 CategoryId = 1,
@@ -51,6 +52,7 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
 
             // Verificar que el producto fue capturado correctamente
             capturedProduct.Should().NotBeNull();
+            capturedProduct!.Id.Should().Be(command.Id);
             capturedProduct!.Name.Should().Be(command.Name);
             capturedProduct.Description.Should().Be(command.Description);
             capturedProduct.CategoryId.Should().Be(command.CategoryId);
@@ -68,6 +70,7 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
             // Arrange
             var command = new CreateProductCommand
             {
+                Id = "123",
                 Name = "X",
                 Description = "",
                 CategoryId = 1,
@@ -96,14 +99,12 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
             capturedProduct.Should().NotBeNull();
 
             // Verificamos que los valores mínimos se guardaron correctamente
+            capturedProduct!.Id.Should().Be("123");
             capturedProduct!.Name.Should().Be("X");
             capturedProduct.Description.Should().Be("");
             capturedProduct.CategoryId.Should().Be(1);
             capturedProduct.Price.Should().Be(0.01m);
             capturedProduct.Sku.Should().Be("SKU1");
-
-            // Verificamos que se generó un ID válido
-            Guid.TryParse(capturedProduct.Id, out _).Should().BeTrue();
 
             // Verificamos que el mock fue llamado
             UnitOfWorkMock.Verify(uow => uow.Products.AddAsync(It.IsAny<Product>()), Times.Once);
@@ -315,41 +316,12 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
         }
 
         [Fact]
-        public async Task Handle_ShouldGenerateValidGuid()
-        {
-            // Arrange
-            var command = new CreateProductCommand
-            {
-                Name = "Test Product",
-                Description = "Test Description",
-                CategoryId = 1,
-                Price = 99.99m,
-                Sku = "SKU123"
-            };
-
-            Product? capturedProduct = null;
-            UnitOfWorkMock.Setup(uow => uow.Products.AddAsync(It.IsAny<Product>()))
-                .Callback<Product>(p => capturedProduct = p)
-                .ReturnsAsync((Product p) => p);
-
-            UnitOfWorkMock.Setup(uow => uow.SaveChangesAsync())
-                .ReturnsAsync(1);
-
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            result.IsSuccess.Should().BeTrue();
-            capturedProduct.Should().NotBeNull();
-            Guid.TryParse(capturedProduct!.Id, out _).Should().BeTrue();
-        }
-
-        [Fact]
         public async Task Handle_MultipleValidationErrors_ShouldReturnAllErrors()
         {
             // Arrange
             var command = new CreateProductCommand
             {
+                Id = "",
                 Name = "",
                 Description = "Test Description",
                 CategoryId = -1,
@@ -364,7 +336,8 @@ namespace InventoryMan.Application.UnitTests.Products.Commands.CreateProductTest
 
             // Assert
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(4); // Errores para nombre, categoryId, price y sku
+            result.Errors.Should().HaveCount(5); // Errores para Id, nombre, categoryId, price y sku
+            result.Errors.Should().Contain(x => x.PropertyName == nameof(command.Id));
             result.Errors.Should().Contain(x => x.PropertyName == nameof(command.Name));
             result.Errors.Should().Contain(x => x.PropertyName == nameof(command.CategoryId));
             result.Errors.Should().Contain(x => x.PropertyName == nameof(command.Price));

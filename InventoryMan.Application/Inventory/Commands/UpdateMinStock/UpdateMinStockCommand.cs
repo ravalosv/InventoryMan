@@ -24,47 +24,47 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
 
         public async Task<Result<bool>> Handle(UpdateMinStockCommand request, CancellationToken cancellationToken)
         {
-            using var transaction = await _unitOfWork.BeginTransactionAsync();
-                {
-                try
-                {
-                    var inventory = await _unitOfWork.Inventories
-                        .GetByStoreIdAsync(request.StoreId)
-                        .ContinueWith(t => t.Result.FirstOrDefault(i => i.ProductId == request.ProductId));
+            await _unitOfWork.BeginTransactionAsync();
 
-                    if (inventory == null)
+            try
+            {
+                var inventory = await _unitOfWork.Inventories
+                    .GetByStoreIdAsync(request.StoreId)
+                    .ContinueWith(t => t.Result.FirstOrDefault(i => i.ProductId == request.ProductId));
+
+                if (inventory == null)
+                {
+                    inventory = new Core.Entities.Inventory
                     {
-                        inventory = new Core.Entities.Inventory
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            ProductId = request.ProductId,
-                            StoreId = request.StoreId,
-                            Quantity = 0,
-                            MinStock = request.MinStock
-                        };
+                        Id = Guid.NewGuid().ToString(),
+                        ProductId = request.ProductId,
+                        StoreId = request.StoreId,
+                        Quantity = 0,
+                        MinStock = request.MinStock
+                    };
 
-                        await _unitOfWork.Inventories.AddAsync(inventory);
-                    }
-                    else
-                    {
-                        inventory.MinStock = request.MinStock;
-
-                        await _unitOfWork.Inventories.UpdateAsync(inventory);
-                    }
-
-                    await _unitOfWork.SaveChangesAsync();
-
-                    await transaction.CommitAsync();
-
-                    return Result<bool>.Success(true);
+                    await _unitOfWork.Inventories.AddAsync(inventory);
                 }
-                catch (Exception ex)
+                else
                 {
-                    await transaction.RollbackAsync();
-                    return Result<bool>.Failure($"Error updating product min stock: {ex.FullMessageError()}");
+                    inventory.MinStock = request.MinStock;
+
+                    await _unitOfWork.Inventories.UpdateAsync(inventory);
                 }
+
+                await _unitOfWork.SaveChangesAsync();
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                return Result<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return Result<bool>.Failure($"Error updating product min stock: {ex.FullMessageError()}");
             }
         }
+        
 
         public class UpdateMinStockCommandValidator : AbstractValidator<UpdateMinStockCommand>
         {

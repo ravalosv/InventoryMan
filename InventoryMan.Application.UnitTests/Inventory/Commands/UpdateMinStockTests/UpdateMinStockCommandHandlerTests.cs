@@ -24,6 +24,16 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.UpdateMinStockTe
                 .ReturnsAsync(_mockTransaction.Object);
 
             _mockUnitOfWork
+                .Setup(x => x.RollbackTransactionAsync())
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            _mockUnitOfWork
+                .Setup(x => x.CommitTransactionAsync())
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            _mockUnitOfWork
                 .Setup(x => x.Inventories)
                 .Returns(_mockInventoryRepository.Object);
 
@@ -72,7 +82,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.UpdateMinStockTe
                 Times.Once);
 
             _mockUnitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
-            _mockTransaction.Verify(x => x.CommitAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.CommitTransactionAsync(), Times.Once());
         }
 
         [Fact]
@@ -110,7 +120,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.UpdateMinStockTe
                 Times.Once);
 
             _mockUnitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
-            _mockTransaction.Verify(x => x.CommitAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.CommitTransactionAsync(), Times.Once());
         }
 
         [Fact]
@@ -135,7 +145,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.UpdateMinStockTe
             Assert.False(result.IsSuccess);
             Assert.Contains("Error updating product min stock", result.Error);
 
-            _mockTransaction.Verify(x => x.RollbackAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.RollbackTransactionAsync(), Times.Once());
             _mockTransaction.Verify(x => x.CommitAsync(CancellationToken.None), Times.Never);
         }
 

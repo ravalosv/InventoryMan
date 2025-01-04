@@ -9,11 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-   
-  </ItemGroup>
-
-  <ItemGroup>
 <PackageReference Include="MediatR" Version="12.4.1" />
+<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.0" />
 <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
@@ -30,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.stagin.json">
+    <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

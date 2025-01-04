@@ -1,3 +1,6 @@
+// k6 run --insecure-skip-tls-verify load-test.js
+
+
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
@@ -28,7 +31,7 @@ export default function() {
     };
 
     const res = http.post(
-        'https://localhost:5001/api/inventory/transfer',
+        'https://inventoryman-app-8q357.ondigitalocean.app/api/inventory/transfer',
         JSON.stringify(payload),
         params
     );

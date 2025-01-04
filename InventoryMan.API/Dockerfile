@@ -1,6 +1,3 @@
-
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
@@ -25,25 +22,13 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Genera un certificado auto-firmado
-RUN apt-get update && \
-    apt-get install -y openssl && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /app/server.key -out /app/server.crt \
-    -subj "/CN=localhost" && \
-    openssl pkcs12 -export -out /app/certificate.pfx \
-    -inkey /app/server.key -in /app/server.crt \
-    -passout pass:your_password_1234
+ENV PORT=8080
+ENV ASPNETCORE_URLS=http://+:${PORT}
 
-ENV ASPNETCORE_URLS=https://+:8443;http://+:8080
-ENV ASPNETCORE_HTTPS_PORT=8443
-ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certificate.pfx
-ENV ASPNETCORE_Kestrel__Certificates__Default__Password=your_password_1234
-
-EXPOSE 8080
-EXPOSE 8443
+EXPOSE ${PORT}
 
 ENTRYPOINT ["dotnet", "InventoryMan.API.dll"]
+
 
 
 

@@ -9,6 +9,7 @@ namespace InventoryMan.Application.Products.Commands.CreateProduct
 {
     public record CreateProductCommand : IRequest<Result<string>>
     {
+        public string Id { get; init; } = default!;
         public string Name { get; init; } = default!;
         public string Description { get; init; } = default!;
         public int CategoryId { get; init; } = default!;
@@ -29,7 +30,7 @@ namespace InventoryMan.Application.Products.Commands.CreateProduct
         {
             var product = new Product
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = request.Id,
                 Name = request.Name,
                 Description = request.Description,
                 CategoryId = request.CategoryId,
@@ -54,6 +55,10 @@ namespace InventoryMan.Application.Products.Commands.CreateProduct
             // Valida utilizando FluentValidation
             public CreateProductCommandValidator()
             {
+                RuleFor(p => p.Id)
+                    .NotEmpty().WithMessage("El Id es requerido")
+                    .MaximumLength(30).WithMessage("El Id no puede exceder 30 caracteres");
+
                 RuleFor(p => p.Name)
                     .NotEmpty().WithMessage("El nombre es requerido")
                     .MaximumLength(100).WithMessage("El nombre no puede exceder 100 caracteres");

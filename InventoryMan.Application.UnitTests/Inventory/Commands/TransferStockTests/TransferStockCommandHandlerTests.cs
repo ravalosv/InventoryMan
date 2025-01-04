@@ -30,6 +30,16 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
                 .ReturnsAsync(_mockTransaction.Object);
 
             _mockUnitOfWork
+                .Setup(x => x.RollbackTransactionAsync())
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            _mockUnitOfWork
+                .Setup(x => x.CommitTransactionAsync())
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            _mockUnitOfWork
                 .Setup(x => x.Movements)
                 .Returns(_mockMovementRepository.Object);
 
@@ -70,11 +80,11 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
 
             // Setup del repositorio de inventarios
             _mockInventoryRepository
-                .Setup(x => x.GetByStoreIdAsync(command.SourceStoreId))
+                .Setup(x => x.GetByStoreIdAndProductIdAsync(command.SourceStoreId, command.ProductId))
                 .ReturnsAsync(new List<Core.Entities.Inventory> { sourceInventory });
 
             _mockInventoryRepository
-                .Setup(x => x.GetByStoreIdAsync(command.TargetStoreId))
+                .Setup(x => x.GetByStoreIdAndProductIdAsync(command.TargetStoreId, command.ProductId))
                 .ReturnsAsync(new List<Core.Entities.Inventory> { targetInventory });
 
             // Setup para las operaciones de actualización y creación
@@ -115,8 +125,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
 
             // Verify transaction was committed
             _mockUnitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
-            _mockTransaction.Verify(x => x.CommitAsync(CancellationToken.None), Times.Once);
-
+            _mockUnitOfWork.Verify(x => x.CommitTransactionAsync(), Times.Once());
         }
 
         [Fact]
@@ -143,7 +152,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
             Assert.Contains("There is not enough inventory", result.Error);
 
             // Verify transaction was rolled back
-            _mockTransaction.Verify(x => x.RollbackAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.RollbackTransactionAsync(), Times.Once());
         }
 
         [Fact]
@@ -178,7 +187,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
             Assert.Contains("There is not enough inventory", result.Error);
 
             // Verify transaction was rolled back
-            _mockTransaction.Verify(x => x.RollbackAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.RollbackTransactionAsync(), Times.Once());
         }
 
         [Fact]
@@ -202,11 +211,11 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
             };
 
             _mockUnitOfWork
-                .Setup(x => x.Inventories.GetByStoreIdAsync(command.SourceStoreId))
+                .Setup(x => x.Inventories.GetByStoreIdAndProductIdAsync(command.SourceStoreId, command.ProductId))
                 .ReturnsAsync(new List<Core.Entities.Inventory> { sourceInventory });
 
             _mockUnitOfWork
-                .Setup(x => x.Inventories.GetByStoreIdAsync(command.TargetStoreId))
+                .Setup(x => x.Inventories.GetByStoreIdAndProductIdAsync(command.TargetStoreId, command.ProductId))
                 .ReturnsAsync(new List<Core.Entities.Inventory>());
 
             // Act
@@ -228,12 +237,22 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
         public async Task Handle_WithDatabaseError_ShouldRollbackAndReturnFailure()
         {
             // Arrange
+
+
             var command = new TransferStockCommand
             {
                 ProductId = "product1",
                 SourceStoreId = "store1",
                 TargetStoreId = "store2",
                 Quantity = 5
+            };
+
+            var initialInventory = new Core.Entities.Inventory
+            {
+                Id = "inv1",
+                ProductId = command.ProductId,
+                StoreId = command.SourceStoreId,
+                Quantity = 10
             };
 
             var sourceInventory = new Core.Entities.Inventory
@@ -245,7 +264,7 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
             };
 
             _mockUnitOfWork
-                .Setup(x => x.Inventories.GetByStoreIdAsync(command.SourceStoreId))
+                .Setup(x => x.Inventories.GetByStoreIdAndProductIdAsync(command.SourceStoreId, command.ProductId))
                 .ReturnsAsync(new List<Core.Entities.Inventory> { sourceInventory });
 
             _mockUnitOfWork
@@ -257,10 +276,11 @@ namespace InventoryMan.Application.UnitTests.Inventory.Commands.TransferStockTes
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains("Error updating product stock", result.Error);
+            Assert.Contains("Database error", result.Error);
 
             // Verify transaction was rolled back
-            _mockTransaction.Verify(x => x.RollbackAsync(CancellationToken.None), Times.Once);
+            _mockUnitOfWork.Verify(x => x.RollbackTransactionAsync(), Times.Once());
+
         }
     }
 }

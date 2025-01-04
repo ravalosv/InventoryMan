@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using FluentValidation;
 using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using InventoryMan.IntegrationTests.Common;
@@ -13,9 +12,9 @@ public class UpdateStockTests : IntegrationTestBase
     private readonly IMediator _mediator;
     private readonly IUnitOfWork _unitOfWork;
 
-    private string testProductID = "18b43125-e3f2-435a-98f5-d70314cc8824";
-    private string sourceStoreId = "859251b6-f0fc-480d-87f2-edd3de9bc817";
-    private string targetStoreId = "5f7b74c4-1ff7-4c7e-b54d-54f3d382b7d1";
+    private string testProductID = "ELEC-WIFI-001";
+    private string sourceStoreId = "STR-01";
+    private string targetStoreId = "STR-02";
 
 
     public UpdateStockTests()

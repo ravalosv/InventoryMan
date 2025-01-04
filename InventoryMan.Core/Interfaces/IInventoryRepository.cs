@@ -6,5 +6,8 @@ namespace InventoryMan.Core.Interfaces
     {
         Task<IEnumerable<Inventory>> GetByStoreIdAsync(string storeId);
         Task<IEnumerable<Inventory>> GetLowStockItemsAsync();
+        Task<IEnumerable<Inventory>> GetByStoreIdAndProductIdAsync(string storeId, string productId);
+
+
     }
 }

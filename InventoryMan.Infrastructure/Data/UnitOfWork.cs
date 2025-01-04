@@ -3,7 +3,6 @@ using InventoryMan.Infrastructure.Data.Context;
 using InventoryMan.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
-
 namespace InventoryMan.Infrastructure.Data
 {
     public class UnitOfWork : IUnitOfWork
@@ -68,8 +67,6 @@ namespace InventoryMan.Infrastructure.Data
         {
             _context.Dispose();
         }
-
-
     }
 }
 
