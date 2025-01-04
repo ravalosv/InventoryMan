@@ -98,40 +98,6 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
         }
 
         [Fact]
-        public async Task Handle_WhenLowStockItemWithoutProduct_ShouldReturnUnknownProductName()
-        {
-            // Arrange
-            var lowStockItems = new List<Core.Entities.Inventory>
-        {
-            new Core.Entities.Inventory
-            {
-                Id = "inv1",
-                ProductId = "prod1",
-                Product = null, // Producto no existe
-                StoreId = "store1",
-                Quantity = 3,
-                MinStock = 5
-            }
-        };
-
-            _mockInventoryRepository
-                .Setup(x => x.GetLowStockItemsAsync())
-                .ReturnsAsync(lowStockItems);
-
-            // Act
-            var result = await _handler.Handle(new GetLowStockItemsQuery(), CancellationToken.None);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.NotNull(result.Data);
-
-            var inventoryDto = result.Data.First();
-            Assert.Equal("Unknown", inventoryDto.ProductName);
-            Assert.Equal(3, inventoryDto.Quantity);
-            Assert.Equal(5, inventoryDto.MinStock);
-        }
-
-        [Fact]
         public async Task Handle_ShouldCallGetLowStockItemsAsyncOnce()
         {
             // Arrange

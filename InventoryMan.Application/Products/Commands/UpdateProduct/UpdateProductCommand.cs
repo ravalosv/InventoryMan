@@ -6,25 +6,70 @@ using MediatR;
 
 namespace InventoryMan.Application.Products.Commands.UpdateProduct
 {
+    /// <summary>
+    /// Comando para actualizar un producto existente
+    /// </summary>
     public record UpdateProductCommand : IRequest<Result<bool>>
     {
+        /// <summary>
+        /// Identificador único del producto
+        /// </summary>
+        /// <example>PROD001</example>
         public string Id { get; init; } = default!;
+
+        /// <summary>
+        /// Nombre actualizado del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion 2024</example>
         public string Name { get; init; } = default!;
+
+        /// <summary>
+        /// Nueva descripción del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion actualizada con procesador Intel i7, 16GB RAM, 512GB SSD</example>
         public string Description { get; init; } = default!;
+
+        /// <summary>
+        /// Nuevo código SKU del producto
+        /// </summary>
+        /// <example>SKU001-2024</example>
         public string Sku { get; init; } = default!;
+
+        /// <summary>
+        /// Nueva categoría del producto
+        /// </summary>
+        /// <example>1</example>
         public int CategoryId { get; init; } = default!;
+
+        /// <summary>
+        /// Nuevo precio del producto
+        /// </summary>
+        /// <example>1299.99</example>
         public decimal Price { get; init; }
     }
 
+    /// <summary>
+    /// Manejador para el comando de actualización de producto
+    /// </summary>
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador
+        /// </summary>
+        /// <param name="unitOfWork">Unidad de trabajo para operaciones de base de datos</param>
         public UpdateProductCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la actualización del producto
+        /// </summary>
+        /// <param name="request">Comando con los datos actualizados del producto</param>
+        /// <param name="cancellationToken">Token de cancelación</param>
+        /// <returns>Resultado de la operación de actualización</returns>
         public async Task<Result<bool>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             try
@@ -50,9 +95,14 @@ namespace InventoryMan.Application.Products.Commands.UpdateProduct
             }
         }
 
+        /// <summary>
+        /// Validador para el comando de actualización de producto
+        /// </summary>
         public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
         {
-            // Valida utilizando FluentValidation
+            /// <summary>
+            /// Constructor del validador con las reglas de validación
+            /// </summary>
             public UpdateProductCommandValidator()
             {
                 RuleFor(p => p.Name)

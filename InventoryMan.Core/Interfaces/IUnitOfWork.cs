@@ -7,6 +7,7 @@ namespace InventoryMan.Core.Interfaces
         IProductRepository Products { get; }
         IInventoryRepository Inventories { get; }
         IMovementRepository Movements { get; }
+        IStoreRepository Stores { get; }
         ITestRepository Tests { get; }
         Task<int> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();

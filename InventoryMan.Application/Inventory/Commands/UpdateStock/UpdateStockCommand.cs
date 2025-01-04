@@ -7,23 +7,52 @@ using MediatR;
 
 namespace InventoryMan.Application.Inventory.Commands.UpdateStock
 {
+    /// <summary>
+    /// Comando para actualizar el stock de un producto
+    /// </summary>
     public record UpdateStockCommand : IRequest<Result<bool>>
     {
+        /// <summary>
+        /// Identificador del producto a actualizar
+        /// </summary>
         public string ProductId { get; init; } = default!;
+
+        /// <summary>
+        /// Identificador de la tienda donde se actualiza el stock
+        /// </summary>
         public string StoreId { get; init; } = default!;
+
+        /// <summary>
+        /// Cantidad a modificar en el inventario (debe ser mayor que 0)
+        /// </summary>
         public int Quantity { get; init; }
+
+        /// <summary>
+        /// Tipo de movimiento (IN para entradas, OUT para salidas)
+        /// </summary>
         public MovementType MovementType { get; init; } = default!;
     }
+
 
     public class UpdateStockCommandHandler : IRequestHandler<UpdateStockCommand, Result<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador de actualización de stock
+        /// </summary>
+        /// <param name="unitOfWork">Unidad de trabajo para operaciones de base de datos</param>
         public UpdateStockCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la actualización del stock
+        /// </summary>
+        /// <param name="request">Datos del movimiento de stock</param>
+        /// <param name="cancellationToken">Token de cancelación</param>
+        /// <returns>Resultado de la operación</returns>
         public async Task<Result<bool>> Handle(UpdateStockCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -101,11 +130,15 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                 return Result<bool>.Failure($"Error updating product stock: {ex.FullMessageError()}");
             }
         }
-        
 
+        /// <summary>
+        /// Validador para el comando de actualización de stock
+        /// </summary>
         public class UpdateStockCommandValidator : AbstractValidator<UpdateStockCommand>
         {
-            // Valida utilizando FluentValidation
+            /// <summary>
+            /// Constructor que define las reglas de validación
+            /// </summary>
             public UpdateStockCommandValidator()
             {
                 RuleFor(p => p.ProductId)

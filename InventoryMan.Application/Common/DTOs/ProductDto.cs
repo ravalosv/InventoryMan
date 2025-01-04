@@ -6,14 +6,52 @@ using System.Threading.Tasks;
 
 namespace InventoryMan.Application.Common.DTOs
 {
-    public record ProductDto
+    /// <summary>
+    /// DTO para la representación detallada de un producto
+    /// </summary>
+    public class ProductDto
     {
-        public string Id { get; init; } = default!;
-        public string Name { get; init; } = default!;
-        public string Description { get; init; } = default!;
-        public int CategoryId { get; init; } = default!;
-        public string CategoryName { get; set; } = default!;
-        public decimal Price { get; init; }
-        public string Sku { get; init; } = default!;
+        /// <summary>
+        /// Identificador único del producto
+        /// </summary>
+        /// <example>PROD001</example>
+        public string Id { get; set; } = default!;
+
+        /// <summary>
+        /// Nombre del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion</example>
+        public string Name { get; set; } = default!;
+
+        /// <summary>
+        /// Descripción detallada del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion con procesador Intel i5, 8GB RAM, 256GB SSD</example>
+        public string Description { get; set; } = default!;
+
+        /// <summary>
+        /// Identificador de la categoría del producto
+        /// </summary>
+        /// <example>CAT001</example>
+        public int CategoryId { get; set; } = default!;
+
+        /// <summary>
+        /// Nombre de la categoría del producto
+        /// </summary>
+        /// <example>Electrónicos</example>
+        public string? CategoryName { get; set; }
+
+        /// <summary>
+        /// Precio del producto
+        /// </summary>
+        /// <example>999.99</example>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Código SKU del producto
+        /// </summary>
+        /// <example>SKU001</example>
+        public string Sku { get; set; } = default!;
     }
+
 }

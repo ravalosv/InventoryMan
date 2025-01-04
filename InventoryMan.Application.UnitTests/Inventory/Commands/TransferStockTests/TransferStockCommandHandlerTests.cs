@@ -1,5 +1,5 @@
 ﻿using Moq;
-using System.Data;
+using Xunit;
 using InventoryMan.Core.Entities;
 using InventoryMan.Core.Interfaces;
 using InventoryMan.Application.Inventory.Commands.UpdateStock;

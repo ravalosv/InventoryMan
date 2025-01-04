@@ -7,23 +7,59 @@ using MediatR;
 
 namespace InventoryMan.Application.Inventory.Commands.UpdateStock
 {
+    /// <summary>
+    /// Comando para transferir stock entre tiendas
+    /// </summary>
     public record TransferStockCommand : IRequest<Result<bool>>
     {
+        /// <summary>
+        /// Identificador del producto a transferir
+        /// </summary>
+        /// <example>PROD001</example>
         public string ProductId { get; init; } = default!;
+
+        /// <summary>
+        /// Identificador de la tienda origen
+        /// </summary>
+        /// <example>STORE001</example>
         public string SourceStoreId { get; init; } = default!;
+
+        /// <summary>
+        /// Identificador de la tienda destino
+        /// </summary>
+        /// <example>STORE002</example>
         public string TargetStoreId { get; init; } = default!;
+
+        /// <summary>
+        /// Cantidad a transferir
+        /// </summary>
+        /// <example>5</example>
         public int Quantity { get; init; }
     }
 
+
+    /// <summary>
+    /// Manejador para el comando de transferencia de stock
+    /// </summary>
     public class TransferStockCommandHandler : IRequestHandler<TransferStockCommand, Result<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador
+        /// </summary>
+        /// <param name="unitOfWork">Unidad de trabajo para operaciones de base de datos</param>
         public TransferStockCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la transferencia de stock entre tiendas
+        /// </summary>
+        /// <param name="request">Comando con los datos de la transferencia</param>
+        /// <param name="cancellationToken">Token de cancelación</param>
+        /// <returns>Resultado de la operación</returns>
         public async Task<Result<bool>> Handle(TransferStockCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -98,9 +134,14 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
         }
 
 
+        /// <summary>
+        /// Validador para el comando de transferencia de stock
+        /// </summary>
         public class TransferStockCommandValidator : AbstractValidator<TransferStockCommand>
         {
-            // Valida utilizando FluentValidation
+            /// <summary>
+            /// Constructor que define las reglas de validación
+            /// </summary>
             public TransferStockCommandValidator()
             {
                 RuleFor(p => p.ProductId)
@@ -120,5 +161,6 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                     .GreaterThan(0).WithMessage("Quantity must be greater than 0");
             }
         }
+
     }
 }

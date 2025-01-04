@@ -6,13 +6,39 @@ using System.Threading.Tasks;
 
 namespace InventoryMan.Application.Common.DTOs
 {
+    /// <summary>
+    /// DTO que representa la información de inventario
+    /// </summary>
     public record InventoryDto
     {
-        public string Id { get; init; } = default!;
-        public string ProductId { get; init; } = default!;
-        public string ProductName { get; init; } = default!;
-        public string StoreId { get; init; } = default!;
-        public int Quantity { get; init; }
-        public int MinStock { get; init; }
+        /// <summary>
+        /// Identificador único del registro de inventario
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Identificador del producto
+        /// </summary>
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// Nombre del producto
+        /// </summary>
+        public string ProductName { get; set; }
+
+        /// <summary>
+        /// Identificador de la tienda
+        /// </summary>
+        public string StoreId { get; set; }
+
+        /// <summary>
+        /// Cantidad actual en inventario
+        /// </summary>
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// Cantidad mínima permitida antes de generar una alerta
+        /// </summary>
+        public int MinStock { get; set; }
     }
 }

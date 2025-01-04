@@ -31,7 +31,7 @@ namespace InventoryMan.Infrastructure.Repositories
         {
             return await _dbSet
                 .Include(i => i.Product)
-                .Where(i => i.Quantity <= i.MinStock)
+                .Where(i => i.Quantity < i.MinStock)
                 .ToListAsync();
         }
     }

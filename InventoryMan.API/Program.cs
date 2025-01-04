@@ -4,6 +4,12 @@ using InventoryMan.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Polly;
 using Npgsql;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using InventoryMan.API.Documentation;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +37,59 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = ApiDocumentation.ApiTitle,
+        Version = ApiDocumentation.ApiVersion,
+        Description = ApiDocumentation.ApiDescription,
+        Contact = new OpenApiContact
+        {
+            Name = ApiDocumentation.ApiContactName,
+            Email = ApiDocumentation.ApiContactEmail
+        }
+    });
+
+    // Habilita las anotaciones
+    c.EnableAnnotations();
+
+    // Habilita los ejemplos
+    c.ExampleFilters();
+
+    // Configuración de agrupamiento de endpoints
+    c.TagActionsBy(api =>
+    {
+        if (api.GroupName != null)
+        {
+            return new[] { api.GroupName };
+        }
+
+        if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+        {
+            return new[] { controllerActionDescriptor.ControllerName };
+        }
+
+        return new[] { "Test" };
+    });
+
+    // Ordenar las operaciones por tag
+    c.OrderActionsBy(apiDesc =>
+        $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+
+    // Configuración del archivo XML
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    // Verifica si el archivo existe
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
+});
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+
 
 // Database configuration
 var mySqlConnectionStr = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING")
@@ -87,27 +145,30 @@ InventoryMan.Application.DependencyInjection.AddApplication(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Health Check endpoint
-app.MapGet("/health", () => Results.Ok("Healthy"));
+//app.MapGet("/health", () => Results.Ok("Healthy"));
 
 // CORS
 app.UseCors("AllowAll");
 
 // Error handling
-app.UseExceptionHandler("/error");
-app.MapGet("/error", () => Results.Problem());
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/get-error");
+    app.MapGet("/get-error", () => Results.Problem());
+}
+
+//app.MapGet("/test-error", () => {
+//    throw new Exception("Esta es una excepción de prueba");
+//});
+
 
 app.UseAuthorization();
 app.MapControllers();

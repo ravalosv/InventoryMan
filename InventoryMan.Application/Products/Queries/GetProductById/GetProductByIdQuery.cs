@@ -5,17 +5,31 @@ using MediatR;
 
 namespace InventoryMan.Application.Products.Queries.GetProductById
 {
+    /// <summary>
+    /// Query para obtener un producto por su identificador
+    /// </summary>
+    /// <param name="Id">Identificador único del producto</param>
     public record GetProductByIdQuery(string Id) : IRequest<Result<ProductDto>>;
 
+    /// <summary>
+    /// Manejador para la consulta de producto por identificador
+    /// </summary>
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<ProductDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador
+        /// </summary>
         public GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la consulta del producto
+        /// </summary>
+        /// <returns>Resultado con los detalles del producto</returns>
         public async Task<Result<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             try

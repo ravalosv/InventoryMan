@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InventoryMan.Core.Entities
+﻿namespace InventoryMan.Core.Entities
 {
     public class Movement
     {
@@ -20,10 +13,23 @@ namespace InventoryMan.Core.Entities
         public Product? Product { get; set; }
     }
 
+    /// <summary>
+    /// Tipos de movimiento de inventario
+    /// </summary>
     public enum MovementType
     {
+        /// <summary>
+        /// Entrada de inventario
+        /// </summary>
         IN,
+
+        /// <summary>
+        /// Salida de inventario
+        /// </summary>
         OUT,
+        /// <summary>
+        /// Transferencia entre tiendas
+        /// </summary>
         TRANSFER
     }
 

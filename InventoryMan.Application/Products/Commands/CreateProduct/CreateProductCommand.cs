@@ -7,25 +7,67 @@ using MediatR;
 
 namespace InventoryMan.Application.Products.Commands.CreateProduct
 {
+    /// <summary>
+    /// Comando para crear un nuevo producto
+    /// </summary>
     public record CreateProductCommand : IRequest<Result<string>>
     {
+        /// <summary>
+        /// Identificador único del producto
+        /// </summary>
+        /// <example>PROD001</example>
         public string Id { get; init; } = default!;
+
+        /// <summary>
+        /// Nombre del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion</example>
         public string Name { get; init; } = default!;
+
+        /// <summary>
+        /// Descripción detallada del producto
+        /// </summary>
+        /// <example>Laptop HP Pavilion con procesador Intel i5, 8GB RAM, 256GB SSD</example>
         public string Description { get; init; } = default!;
+
+        /// <summary>
+        /// Identificador de la categoría del producto
+        /// </summary>
+        /// <example>1</example>
         public int CategoryId { get; init; } = default!;
+
+        /// <summary>
+        /// Precio del producto
+        /// </summary>
+        /// <example>999.99</example>
         public decimal Price { get; init; }
+
+        /// <summary>
+        /// Código SKU del producto
+        /// </summary>
+        /// <example>SKU001</example>
         public string Sku { get; init; } = default!;
     }
 
+    /// <summary>
+    /// Manejador para el comando de creación de producto
+    /// </summary>
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<string>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador
+        /// </summary>
         public CreateProductCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la creación del producto
+        /// </summary>
+        /// <returns>Identificador del producto creado</returns>
         public async Task<Result<string>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var product = new Product
@@ -50,9 +92,14 @@ namespace InventoryMan.Application.Products.Commands.CreateProduct
             }
         }
 
+        /// <summary>
+        /// Validador para el comando de creación de producto
+        /// </summary>
         public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
         {
-            // Valida utilizando FluentValidation
+            /// <summary>
+            /// Constructor del validador con las reglas de validación
+            /// </summary>
             public CreateProductCommandValidator()
             {
                 RuleFor(p => p.Id)

@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>37c5a3f1-82e6-44da-b936-ce5e82cad6c2</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +17,8 @@
 <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
+<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
 <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
 <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.2.0" />
 <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />

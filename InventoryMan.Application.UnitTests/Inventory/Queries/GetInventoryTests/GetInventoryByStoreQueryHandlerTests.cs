@@ -9,16 +9,21 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IInventoryRepository> _mockInventoryRepository;
+        private readonly Mock<IStoreRepository> _mockStoreRepository;
         private readonly GetInventoryByStoreQueryHandler _handler;
 
         public GetInventoryByStoreQueryHandlerTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockInventoryRepository = new Mock<IInventoryRepository>();
+            _mockStoreRepository = new Mock<IStoreRepository>();
 
             _mockUnitOfWork
                 .Setup(x => x.Inventories)
                 .Returns(_mockInventoryRepository.Object);
+
+            _mockUnitOfWork .Setup(x => x.Stores)
+                .Returns(_mockStoreRepository.Object);
 
             _handler = new GetInventoryByStoreQueryHandler(_mockUnitOfWork.Object);
         }
@@ -29,6 +34,12 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
             // Arrange
             var storeId = "store1";
             var query = new GetInventoryByStoreQuery(storeId);
+
+            var store = new Store { Id = storeId, Name = "Store 1" };
+
+            _mockStoreRepository
+                .Setup(x => x.GetByIdAsync(storeId))
+                .ReturnsAsync(store);
 
             var inventories = new List<Core.Entities.Inventory>
         {
@@ -90,6 +101,15 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
             var storeId = "store1";
             var query = new GetInventoryByStoreQuery(storeId);
 
+
+            var store = new Store { Id = storeId, Name = "Store 1" };
+
+            _mockStoreRepository
+                .Setup(x => x.GetByIdAsync(storeId))
+                .ReturnsAsync(store);
+
+
+
             _mockInventoryRepository
                 .Setup(x => x.GetByStoreIdAsync(storeId))
                 .ReturnsAsync(new List<Core.Entities.Inventory>());
@@ -109,6 +129,15 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
             // Arrange
             var storeId = "store1";
             var query = new GetInventoryByStoreQuery(storeId);
+
+
+            var store = new Store { Id = storeId, Name = "Store 1" };
+
+            _mockStoreRepository
+                .Setup(x => x.GetByIdAsync(storeId))
+                .ReturnsAsync(store);
+
+
 
             var inventories = new List<Core.Entities.Inventory>
         {
@@ -136,6 +165,29 @@ namespace InventoryMan.Application.UnitTests.Inventory.Queries.GetInventoryTests
 
             var inventoryDto = result.Data.First();
             Assert.Equal("Unknown", inventoryDto.ProductName);
+        }
+
+        [Fact]
+        public async Task Handle_WhenStoreDoesNotExists_ShouldReturnError()
+        {
+            // Arrange
+            var storeId = "InexistentStoreId";
+            var query = new GetInventoryByStoreQuery(storeId);
+
+
+            _mockStoreRepository
+                .Setup(x => x.GetByIdAsync(storeId))
+                .ReturnsAsync((Store)null);
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Null(result.Data); 
+            Assert.Contains($"Store with ID {storeId} not found", result.Error); // Corrección: verificar mensaje de error
+
+
         }
     }
 

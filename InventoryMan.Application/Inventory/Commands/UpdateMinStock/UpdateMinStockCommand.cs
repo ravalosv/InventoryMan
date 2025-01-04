@@ -6,22 +6,51 @@ using MediatR;
 
 namespace InventoryMan.Application.Inventory.Commands.UpdateStock
 {
+    /// <summary>
+    /// Comando para actualizar el stock mínimo de un producto
+    /// </summary>
     public record UpdateMinStockCommand : IRequest<Result<bool>>
     {
+        /// <summary>
+        /// Identificador del producto
+        /// </summary>
+        /// <example>PROD001</example>
         public string ProductId { get; init; } = default!;
+
+        /// <summary>
+        /// Identificador de la tienda
+        /// </summary>
+        /// <example>STORE001</example>
         public string StoreId { get; init; } = default!;
+
+        /// <summary>
+        /// Cantidad mínima de stock permitida
+        /// </summary>
+        /// <example>5</example>
         public int MinStock { get; init; } = default!;
     }
 
+
+    /// <summary>
+    /// Manejador para el comando de actualización de stock mínimo
+    /// </summary>
     public class UpdateMinStockCommandHandler : IRequestHandler<UpdateMinStockCommand, Result<bool>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor del manejador
+        /// </summary>
+        /// <param name="unitOfWork">Unidad de trabajo para operaciones de base de datos</param>
         public UpdateMinStockCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Procesa la actualización del stock mínimo
+        /// </summary>
+        /// <returns>Resultado de la operación</returns>
         public async Task<Result<bool>> Handle(UpdateMinStockCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -64,11 +93,16 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
                 return Result<bool>.Failure($"Error updating product min stock: {ex.FullMessageError()}");
             }
         }
-        
 
+
+        /// <summary>
+        /// Validador para el comando de actualización de stock mínimo
+        /// </summary>
         public class UpdateMinStockCommandValidator : AbstractValidator<UpdateMinStockCommand>
         {
-            // Valida utilizando FluentValidation
+            /// <summary>
+            /// Constructor que define las reglas de validación
+            /// </summary>
             public UpdateMinStockCommandValidator()
             {
                 RuleFor(p => p.ProductId)
@@ -79,8 +113,8 @@ namespace InventoryMan.Application.Inventory.Commands.UpdateStock
 
                 RuleFor(p => p.MinStock)
                     .GreaterThan(0).WithMessage("MinStock must be greater than 0");
-
             }
         }
+
     }
 }
