@@ -2,11 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using InventoryMan.Application.Inventory.Commands.UpdateStock;
 using InventoryMan.Application.Inventory.Queries.GetLowStockItems;
-using InventoryMan.Application.Common.DTOs;
-using InventoryMan.Application.Common.Models;
-using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Annotations;
-using static InventoryMan.API.Documentation.ApiDocumentation;
+using InventoryMan.API.Extensions;
 
 
 namespace InventoryMan.API.Controllers
@@ -19,10 +15,12 @@ namespace InventoryMan.API.Controllers
     public class InventoryController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<InventoryController> _logger;
 
-        public InventoryController(IMediator mediator)
+        public InventoryController(IMediator mediator, ILogger<InventoryController> logger)
         {
             _mediator = mediator;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -77,10 +75,48 @@ namespace InventoryMan.API.Controllers
         [HttpGet("alerts")]
         public async Task<IActionResult> GetLowStockItems()
         {
-            var result = await _mediator.Send(new GetLowStockItemsQuery());
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
-        }
+            try
+            {
+                _logger.LogInventoryOperation("GetLowStockItems", "Started", new
+                {
+                    TraceId = HttpContext.TraceIdentifier,
+                    RequestedBy = User?.Identity?.Name ?? "anonymous"
+                });
 
+                var result = await _mediator.Send(new GetLowStockItemsQuery());
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogInventoryOperation("GetLowStockItems", "Completed", new
+                    {
+                        AlertCount = result.Data?.Count() ?? 0,
+                        TraceId = HttpContext.TraceIdentifier,
+                        Items = result.Data?.Select(item => new
+                        {
+                            item.ProductId,
+                            item.Quantity,
+                            item.MinStock
+                        })
+                    });
+                    return Ok(result);
+                }
+
+                _logger.LogInventoryOperation("GetLowStockItems", "Failed", new
+                {
+                    Error = result.Error,
+                    TraceId = HttpContext.TraceIdentifier
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInventoryOperation("GetLowStockItems", "Error", new
+                {
+                    TraceId = HttpContext.TraceIdentifier
+                }, ex, LogLevel.Error);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Actualiza el stock de un producto en una tienda específica
@@ -144,8 +180,34 @@ namespace InventoryMan.API.Controllers
         [HttpPost("update-stock")]
         public async Task<IActionResult> UpdateStock([FromBody] UpdateStockCommand command)
         {
-            var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            try
+            {
+                _logger.LogStockUpdate("Started", command);
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogStockUpdate("Completed", command, new
+                    {
+                        Status = "Success",
+                        ResultData = result.Data
+                    });
+                    return Ok(result);
+                }
+
+                _logger.LogStockUpdate("Failed", command, new
+                {
+                    Status = "Failed",
+                    Error = result.Error
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogStockUpdate("Error", command, exception: ex, level: LogLevel.Error);
+                throw;
+            }
         }
 
         /// <summary>
@@ -204,9 +266,36 @@ namespace InventoryMan.API.Controllers
         [HttpPost("update-min-stock")]
         public async Task<IActionResult> UpdateMinStock([FromBody] UpdateMinStockCommand command)
         {
-            var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            try
+            {
+                _logger.LogMinStockUpdate("Started", command);
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogMinStockUpdate("Completed", command, new
+                    {
+                        Status = "Success",
+                        ResultData = result.Data
+                    });
+                    return Ok(result);
+                }
+
+                _logger.LogMinStockUpdate("Failed", command, new
+                {
+                    Status = "Failed",
+                    Error = result.Error
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogMinStockUpdate("Error", command, exception: ex, level: LogLevel.Error);
+                throw;
+            }
         }
+
 
         /// <summary>
         /// Transfiere stock de un producto entre dos tiendas
@@ -265,9 +354,36 @@ namespace InventoryMan.API.Controllers
         [HttpPost("transfer")]
         public async Task<IActionResult> Transfer([FromBody] TransferStockCommand command)
         {
-            var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            try
+            {
+                _logger.LogStockTransfer("Started", command);
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogStockTransfer("Completed", command, new
+                    {
+                        Status = "Success",
+                        ResultData = result.Data
+                    });
+                    return Ok(result);
+                }
+
+                _logger.LogStockTransfer("Failed", command, new
+                {
+                    Status = "Failed",
+                    Error = result.Error
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogStockTransfer("Error", command, exception: ex, level: LogLevel.Error);
+                throw;
+            }
         }
+
 
     }
 }

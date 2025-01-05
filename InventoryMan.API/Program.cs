@@ -8,14 +8,33 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using InventoryMan.API.Documentation;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Filters;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+using Serilog;
+using InventoryMan.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.SetMinimumLevel(LogLevel.Warning);
+// Configuración de Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)  // Lee la configuración base del appsettings.json
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console(new JsonFormatter(), restrictedToMinimumLevel: LogEventLevel.Warning)  // Solo un Console
+    .WriteTo.File(new JsonFormatter(),
+        Path.Combine("logs", "inventory-api-.json"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30)  // Agregamos la restricción
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+// Prueba de niveles de log
+//Log.Information("Test Information - NO debería aparecer");
+//Log.Warning("Test Warning - SÍ debería aparecer");
+//Log.Error("Test Error - SÍ debería aparecer");
 
 
 builder.WebHost.ConfigureKestrel(options =>
@@ -169,6 +188,7 @@ else
 //    throw new Exception("Esta es una excepción de prueba");
 //});
 
+app.UseMiddleware<LogEnricherMiddleware>();
 
 app.UseAuthorization();
 app.MapControllers();

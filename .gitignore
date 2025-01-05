@@ -32,3 +32,4 @@
 .vs/
 Publish/
 InventoryMan.API/appsettings.Development.json
+InventoryMan.API/logs

@@ -7,6 +7,7 @@ using InventoryMan.Application.Products.Commands.DeleteProduct;
 using InventoryMan.Application.Products.Commands.UpdateProduct;
 using InventoryMan.Application.Products.Queries.GetProductById;
 using InventoryMan.Application.Products.Queries.GetProducts;
+using InventoryMan.API.Extensions;
 
 namespace InventoryMan.API.Controllers
 {
@@ -15,10 +16,12 @@ namespace InventoryMan.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IMediator mediator)
+        public ProductsController(IMediator mediator, ILogger<ProductsController> logger)
         {
             _mediator = mediator;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -82,35 +85,60 @@ namespace InventoryMan.API.Controllers
         /// <response code="400">Si ocurre un error durante la consulta</response>
         [HttpGet]
         public async Task<ActionResult<PagedList<ProductDto>>> GetProducts(
-        [FromQuery] string? category,
-        [FromQuery] decimal? minPrice,
-        [FromQuery] decimal? maxPrice,
-        [FromQuery] int? minStock,
-        [FromQuery] int? maxStock,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string? sortBy = null,
-        [FromQuery] bool sortDesc = false)
+                [FromQuery] string? category,
+                [FromQuery] decimal? minPrice,
+                [FromQuery] decimal? maxPrice,
+                [FromQuery] int? minStock,
+                [FromQuery] int? maxStock,
+                [FromQuery] int pageNumber = 1,
+                [FromQuery] int pageSize = 10,
+                [FromQuery] string? sortBy = null,
+                [FromQuery] bool sortDesc = false)
         {
-            var query = new GetProductsQuery
+            try
             {
-                Category = category,
-                MinPrice = minPrice,
-                MaxPrice = maxPrice,
-                MinStock = minStock,
-                MaxStock = maxStock,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                SortBy = sortBy,
-                SortDesc = sortDesc
-            };
+                var query = new GetProductsQuery
+                {
+                    Category = category,
+                    MinPrice = minPrice,
+                    MaxPrice = maxPrice,
+                    MinStock = minStock,
+                    MaxStock = maxStock,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    SortBy = sortBy,
+                    SortDesc = sortDesc
+                };
 
-            var result = await _mediator.Send(query);
+                _logger.LogProductOperation("GetProducts", "Started", new
+                {
+                    Filters = query,
+                    TraceId = HttpContext.TraceIdentifier
+                });
 
-            if (result.IsSuccess)
-                return Ok(result);
+                var result = await _mediator.Send(query);
 
-            return BadRequest(result);
+                if (result.IsSuccess)
+                {
+                    _logger.LogProductOperation("GetProducts", "Completed", new
+                    {
+                        TotalCount = result.Data.TotalCount,
+                        PageSize = result.Data.PageSize,
+                        PageNumber = result.Data.PageNumber,
+                        TotalPages = result.Data.TotalPages
+                    });
+                    return Ok(result);
+                }
+
+                _logger.LogProductOperation("GetProducts", "Failed", new { Error = result.Error },
+                    level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogProductOperation("GetProducts", "Error", new { }, ex, LogLevel.Error);
+                throw;
+            }
         }
 
         /// <summary>
@@ -153,10 +181,28 @@ namespace InventoryMan.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var result = await _mediator.Send(new GetProductByIdQuery(id));
-            return result.IsSuccess ? Ok(result) : NotFound(result);
-        }
+            try
+            {
+                _logger.LogProductOperation("GetById", "Started", new { ProductId = id });
 
+                var result = await _mediator.Send(new GetProductByIdQuery(id));
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogProductOperation("GetById", "Completed", new { ProductId = id });
+                    return Ok(result);
+                }
+
+                _logger.LogProductOperation("GetById", "NotFound", new { ProductId = id },
+                    level: LogLevel.Warning);
+                return NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogProductOperation("GetById", "Error", new { ProductId = id }, ex, LogLevel.Error);
+                throw;
+            }
+        }
         /// <summary>
         /// Crea un nuevo producto
         /// </summary>
@@ -207,12 +253,42 @@ namespace InventoryMan.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
-            var result = await _mediator.Send(command);
-            return result.IsSuccess
-                ? CreatedAtAction(nameof(GetById), new { id = result.Data }, result)
-                : BadRequest(result);
-        }
+            try
+            {
+                _logger.LogProductOperation("Create", "Started", new
+                {
+                    Product = new
+                    {
+                        command.Name,
+                        command.CategoryId,
+                        command.Price,
+                        RequestedBy = User?.Identity?.Name ?? "anonymous"
+                    }
+                });
 
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogProductOperation("Create", "Completed", new
+                    {
+                        ProductId = result.Data,
+                        command.Name,
+                        command.CategoryId
+                    });
+                    return CreatedAtAction(nameof(GetById), new { id = result.Data }, result);
+                }
+
+                _logger.LogProductOperation("Create", "Failed", new { Error = result.Error },
+                    level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogProductOperation("Create", "Error", command, ex, LogLevel.Error);
+                throw;
+            }
+        }
         /// <summary>
         /// Actualiza un producto existente
         /// </summary>
@@ -264,13 +340,51 @@ namespace InventoryMan.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdateProductCommand command)
         {
-            if (id != command.Id)
-                return BadRequest("ID mismatch");
-            
-            var result = await _mediator.Send(command);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
-        }
+            try
+            {
+                if (id != command.Id)
+                {
+                    _logger.LogProductOperation("Update", "IdMismatch", new
+                    {
+                        PathId = id,
+                        CommandId = command.Id
+                    }, level: LogLevel.Warning);
+                    return BadRequest("ID mismatch");
+                }
 
+                _logger.LogProductOperation("Update", "Started", new
+                {
+                    ProductId = id,
+                    Updates = new
+                    {
+                        command.Name,
+                        command.CategoryId,
+                        command.Price,
+                        RequestedBy = User?.Identity?.Name ?? "anonymous"
+                    }
+                });
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogProductOperation("Update", "Completed", new { ProductId = id });
+                    return Ok(result);
+                }
+
+                _logger.LogProductOperation("Update", "Failed", new
+                {
+                    ProductId = id,
+                    Error = result.Error
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogProductOperation("Update", "Error", new { ProductId = id }, ex, LogLevel.Error);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Elimina un producto existente
@@ -308,8 +422,34 @@ namespace InventoryMan.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _mediator.Send(new DeleteProductCommand { Id = id });
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            try
+            {
+                _logger.LogProductOperation("Delete", "Started", new
+                {
+                    ProductId = id,
+                    RequestedBy = User?.Identity?.Name ?? "anonymous"
+                });
+
+                var result = await _mediator.Send(new DeleteProductCommand { Id = id });
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogProductOperation("Delete", "Completed", new { ProductId = id });
+                    return Ok(result);
+                }
+
+                _logger.LogProductOperation("Delete", "Failed", new
+                {
+                    ProductId = id,
+                    Error = result.Error
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogProductOperation("Delete", "Error", new { ProductId = id }, ex, LogLevel.Error);
+                throw;
+            }
         }
     }
 }

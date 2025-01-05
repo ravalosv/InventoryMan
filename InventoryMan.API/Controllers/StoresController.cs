@@ -1,4 +1,5 @@
-﻿using InventoryMan.Application.Inventory.Queries.GetInventoryByStore;
+﻿using InventoryMan.API.Extensions;
+using InventoryMan.Application.Inventory.Queries.GetInventoryByStore;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace InventoryMan.API.Controllers
     public class StoresController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<StoresController> _logger;
 
-        public StoresController(IMediator mediator)
+        public StoresController(IMediator mediator, ILogger<StoresController> logger)
         {
             _mediator = mediator;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -65,9 +68,47 @@ namespace InventoryMan.API.Controllers
         [HttpGet("{storeId}/inventory")]
         public async Task<IActionResult> GetByStore(string storeId)
         {
-            var result = await _mediator.Send(new GetInventoryByStoreQuery(storeId));
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            try
+            {
+                _logger.LogInventoryOperation("GetByStore", "Started", new
+                {
+                    StoreId = storeId,
+                    TraceId = HttpContext.TraceIdentifier,
+                    RequestedBy = User?.Identity?.Name ?? "anonymous"
+                }, level: LogLevel.Information);
+
+                var result = await _mediator.Send(new GetInventoryByStoreQuery(storeId));
+
+                if (result.IsSuccess)
+                {
+                    _logger.LogInventoryOperation("GetByStore", "Completed", new
+                    {
+                        StoreId = storeId,
+                        ItemsCount = result.Data?.Count() ?? 0,
+                        TraceId = HttpContext.TraceIdentifier
+                    }, level: LogLevel.Information);
+                    return Ok(result);
+                }
+
+                _logger.LogInventoryOperation("GetByStore", "Failed", new
+                {
+                    StoreId = storeId,
+                    Error = result.Error,
+                    TraceId = HttpContext.TraceIdentifier
+                }, level: LogLevel.Warning);
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInventoryOperation("GetByStore", "Error", new
+                {
+                    StoreId = storeId,
+                    TraceId = HttpContext.TraceIdentifier
+                }, ex, LogLevel.Error);
+                throw;
+            }
         }
+
     }
 }
 
