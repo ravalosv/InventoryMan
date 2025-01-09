@@ -227,7 +227,7 @@ docker image push [ruta Container Registry]/inventoryman-api:[tag de versión]
 
 1. Configuración Básica
 - App Platform → Create App
-- Seleccionar "Container Registry"
+- Seleccionar "Container image" → "DigitalOcean Container Registry"
 - Elegir imagen y tag
 - Nombrar: "inventoryman-app"
 
