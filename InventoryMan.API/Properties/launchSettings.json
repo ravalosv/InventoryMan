@@ -7,7 +7,7 @@
       "applicationUrl": "http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DATABASE_CONNECTION_STRING": "Host=localhost;Database=InventoryMan;Username=postgres;Password=password"
+        "DATABASE_CONNECTION_STRING": "Host=localhost;Port=5432;Database=InventoryMan;Username=postgres;Password=password"
       },
       "dotnetRunMessages": true,
     },
