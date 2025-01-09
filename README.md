@@ -55,6 +55,8 @@ dotnet restore
   }
 }
 ```
+> **Nota**: Reemplazar `host`, `database`, `port`, `user` y `password` con los valores de la base de datos creada 
+> 
 - Abrir Package Manager Console (View -> Other Windows -> Package Manager Console)
 - Seleccionar `InventoryMan.Infrastructure` como Default project 
 - Ejecutar:
