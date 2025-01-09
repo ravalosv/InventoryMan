@@ -17,9 +17,9 @@ export const options = {
 };
 
 const payload = {
-    productId: "00bb8276-4385-4c5a-b0bf-63b5181c83aa",
-    sourceStoreId: "15617380-1ce6-4a3d-9214-81dc79b6557b",
-    targetStoreId: "1390508a-e79a-451f-8be7-975a9b6a2283",
+    productId: "ELEC-CABL-001",
+    sourceStoreId: "STR-01",
+    targetStoreId: "STR-02",
     quantity: 1
 };
 
@@ -31,7 +31,7 @@ export default function() {
     };
 
     const res = http.post(
-        'https://inventoryman-app-8q357.ondigitalocean.app/api/inventory/transfer',
+        'https://[URLServidorAPI]/api/inventory/transfer',
         JSON.stringify(payload),
         params
     );

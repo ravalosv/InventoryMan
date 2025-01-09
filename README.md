@@ -8,6 +8,8 @@ InventoryMan es un sistema de gestión de inventario desarrollado con .NET 8, si
 - [Documentación de API](#-documentación-de-api)
 - [Arquitectura](#-arquitectura)
 - [Decisiones Técnicas (ADR)](#-architecture-decision-record-adr)
+- [Testing](#-testing)
+- [API Collection](#-api-collection)]
 
 ## 🔧 Requisitos Previos
 
@@ -251,20 +253,6 @@ ASPNETCORE_ENVIRONMENT=Production
   Success Threshold: 1
   Failure Threshold: 3
   ```
-
-#### Comandos Útiles
-
-```bash
-# Gestión de Apps
-doctl apps logs <app-id>
-doctl apps list
-doctl apps create-deployment <app-id>
-
-# Gestión del Registry
-doctl registry repository list
-doctl registry repository list-tags [NOMBRE-REPO]
-doctl registry repository delete-tag [NOMBRE-REPO] [TAG]
-```
 
 #### Verificación Final
 
@@ -556,3 +544,138 @@ public async Task<Result<bool>> Handle(TransferStockCommand request, Cancellatio
     }
 }
 ```
+## 🧪 Testing
+
+El proyecto incluye una suite completa de pruebas unitarias, de integración y pruebas de carga para asegurar la calidad y rendimiento del sistema.
+
+### Estructura de Tests
+
+```
+📦 Tests
+├── 🔬 InventoryMan.Application.UnitTests
+├── 🔬 InventoryMan.Infrastructure.UnitTests
+├── 🔗 InventoryMan.IntegrationTests
+└── 📊 load-test.js
+```
+
+### Ejecutar Tests Unitarios y de Integración
+
+#### Desde Visual Studio
+1. Abrir Test Explorer (Test → Test Explorer)
+2. Ejecutar todos los tests o seleccionar tests específicos
+> **✨ Resultado Esperado**: Todos los tests deberían ejecutarse exitosamente
+
+#### Desde Línea de Comandos
+```bash
+# Ejecutar todos los tests
+dotnet test
+
+# Ejecutar tests de un proyecto específico
+dotnet test InventoryMan.Application.UnitTests
+dotnet test InventoryMan.Infrastructure.UnitTests
+dotnet test InventoryMan.IntegrationTests
+```
+
+### Pruebas de Carga (k6)
+
+#### Prerequisitos
+- [k6](https://k6.io/docs/getting-started/installation/) instalado en el equipo
+- API desplegada y accesible
+- Datos iniciales cargados
+
+#### Preparación de Datos
+1. Cargar inventario inicial usando el endpoint:
+```http
+POST /api/inventory/update-stock
+Content-Type: application/json
+
+{
+    "productId": "ELEC-CABL-001",
+    "storeId": "STR-01",
+    "quantity": 10000, 
+    "movementType": "IN"
+}
+```
+> **✨ Resultado Esperado**: Código 200 y confirmación de actualización de stock
+
+#### Configuración del Script de Carga
+1. Ubicar `load-test.js`
+2. Modificar la URL del servidor:
+```javascript
+const res = http.post(
+    'https://[URLServidorAPI]/api/inventory/transfer',
+    JSON.stringify(payload),
+    params
+);
+```
+> **Nota**: Reemplazar [URLServidorAPI] con la URL real del servidor
+
+#### Ejecución de Pruebas de Carga
+```bash
+k6 run --insecure-skip-tls-verify load-test.js
+```
+> **✨ Resultado Esperado**: k6 mostrará métricas de rendimiento incluyendo:
+> - Tiempo de respuesta promedio
+> - Throughput
+> - Tasa de error
+> - Usuarios virtuales concurrentes
+
+### Cobertura de Tests
+
+Los tests cubren los siguientes aspectos:
+
+#### Tests Unitarios de Aplicación
+- Comandos CQRS
+- Queries
+- Validaciones
+
+#### Tests Unitarios de Infraestructura
+- Repositorios
+- Configuraciones
+- Mapeos
+
+#### Tests de Integración
+- Flujos completos de API
+- Persistencia de datos
+- Transacciones
+
+#### Pruebas de Carga
+- Concurrencia
+- Tiempo de respuesta
+- Estabilidad del sistema
+
+### Notas Importantes
+- Asegurarse de tener una base de datos de prueba separada para los tests de integración
+- Las pruebas de carga pueden afectar el rendimiento del sistema, ejecutar con precaución en ambientes productivos
+
+## 📡 API Collection
+
+### Postman Collection
+
+La solución incluye una colección de Postman para facilitar las pruebas y la exploración de la API.
+
+#### Ubicación
+```
+📂 Solución
+└── 📄 InventoryMan.postman_collection.json
+```
+
+#### Importar en Postman
+1. Abrir Postman
+2. Clic en "File" -> "Import"
+3. Arrastrar el archivo `InventoryMan.postman_collection.json` o navegar hasta su ubicación
+4. Confirmar la importación
+
+#### Contenido de la Colección
+La colección incluye todos los endpoints disponibles en la API:
+- Gestión de Inventario
+- Transferencias de Stock
+- Consultas de Productos
+- Operaciones de Tiendas
+
+> **💡 Tip**: Asegúrate de configurar la variable de entorno `url` en Postman para apuntar a tu servidor API
+
+#### Uso
+1. Seleccionar el environment correcto
+2. Los endpoints están organizados por categorías
+3. Cada request incluye ejemplos de payload cuando es necesario
