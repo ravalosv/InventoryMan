@@ -36,7 +36,7 @@ cd InventoryMan
 2. Configurar PostgreSQL
 
 - Instalar [PostgreSQL](https://www.postgresql.org/download/)
-- Crear una base de datos llamada `inventoryman`
+- Crear una base de datos llamada `InventoryMan`
 - Dentro del proyecto InventoryMan.API, actualizar `appsettings.Development.json`:
 ```json
 {
