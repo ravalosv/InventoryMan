@@ -268,9 +268,13 @@ doctl registry repository delete-tag [NOMBRE-REPO] [TAG]
 
 #### Verificación Final
 
-1. Probar el endpoint de salud:
+1. Ingresar en el navegador a:
 ```
-https://[UrlServer]/api/tests/dbtest
+https://[UrlServer]/swagger
+```
+2. Probar el endpoint:
+```
+/api/tests/dbtest
 ```
 > **✨ Resultado Esperado**: El endpoint debe devolver un código 200 y un mensaje "Database connection successfully established"
 
