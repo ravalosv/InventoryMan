@@ -207,10 +207,10 @@ Hay dos opciones para configurar la base de datos:
 docker-compose build
 
 # Etiquetar imagen
-docker tag inventoryman-api:latest [ruta Container Registry]:[tag de versión]
+docker image tag inventoryman-api:latest [ruta Container Registry]/inventoryman:[tag de versión]
 
 # Publicar al registry
-docker push [ruta Container Registry]:[tag de versión]
+docker image push [ruta Container Registry]/inventoryman:[tag de versión]
 ```
 > **Nota**: Ajustar los nombres de repositorios según tu cuenta de DigitalOcean
 
