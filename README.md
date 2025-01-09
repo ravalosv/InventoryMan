@@ -201,7 +201,7 @@ Hay dos opciones para configurar la base de datos:
 2. Publicar Imagen
 ```bash
 # Asegurarse que Docker Desktop esté ejecutándose
-# Desde PowerShell en la ruta de la solución:
+# Desde PowerShell en la ruta del proyecto InventoryMan.API:
 
 # Construir imagen
 docker-compose build
@@ -219,6 +219,10 @@ docker push [ruta Container Registry]:[tag de versión]
 - Buscar `inventoryman-api` y verificar el tag
 > **✨ Resultado Esperado**: Debe encontrarse el repositorio inventoryman-api con el tag de versión proporcionado
 
+#### Solución de Problemas Comunes
+
+- **Al ejecutar ´docker-compose build´ marca error**: Verificar que Docker Desktop se encuentre funcionando.
+- 
 #### Crear App en DigitalOcean
 
 1. Configuración Básica
