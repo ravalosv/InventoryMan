@@ -32,8 +32,4 @@
     <ProjectReference Include="..\InventoryMan.Core\InventoryMan.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Logging\Configurations\" />
-  </ItemGroup>
-
 </Project>

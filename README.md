@@ -1,13 +1,13 @@
-﻿# InventoryMan - Sistema de Gestión de Inventario
+﻿# 📦 InventoryMan - Sistema de Gestión de Inventario
 
 InventoryMan es un sistema de gestión de inventario desarrollado con .NET 8, siguiendo los principios de Clean Architecture y CQRS, utilizando PostgreSQL como base de datos.
 
 ## 📋 Tabla de Contenidos
-- [Requisitos Previos](#requisitos-previos)
-- [Instalación](#instalación)
-- [Documentación de API](#documentación-de-api)
-- [Arquitectura](#arquitectura)
-- [Decisiones Técnicas](#decisiones-técnicas)
+- [Requisitos Previos](#-requisitos-previos)
+- [Instalación y Despliegue](#-instalación-y-despliegue)
+- [Documentación de API](#-documentación-de-api)
+- [Arquitectura](#-arquitectura)
+- [Decisiones Técnicas (ADR)](#-architecture-decision-record-adr)
 
 ## 🔧 Requisitos Previos
 
@@ -80,7 +80,7 @@ Update-Database
   }
 }
 ```
-> Nota: Reemplazar `host`, `database`, `port`, `user` y `password` con los valores de la base de datos creada 
+> **Nota**: Reemplazar `host`, `database`, `port`, `user` y `password` con los valores de la base de datos creada 
 
 6. Ejecutar el Proyecto
 - Presionar F5 en Visual Studio 2022
@@ -94,7 +94,6 @@ Update-Database
 2. Verificar que la base de datos contiene las tablas y datos iniciales
 3. Probar un endpoint básico como `GET /api/tests/health` para confirmar la conectividad
 > **✨ Resultado Esperado**: El endpoint debe devolver un código 200 y un mensaje "API is running"
-
 
 #### Solución de Problemas Comunes
 
@@ -273,8 +272,6 @@ https://[UrlServer]/api/tests/dbtest
 ### Notas
 - Ajustar los nombres de repositorios y tags según tu cuenta de DigitalOcean
 
-
-
 ## 📚 Documentación de API
 
 La documentación API se puede revisar dentro de swagger en la ruta
@@ -292,8 +289,6 @@ El proyecto sigue los principios de Clean Architecture con las siguientes capas:
 - **API**: Capa de presentación y endpoints
 
 ### Diagrama de Arquitectura
-
-https://monica.im/share/artifact?id=rppZr5fyoTi3K4eCZeDsGj
 
 ```mermaid
 graph TB
@@ -371,16 +366,19 @@ graph TB
   class Entities,Interfaces domain;
   class Context,Repos,UoW,DB infrastructure;
   class Tools tools;
-```
+  ```
 
-## 🔨 Architecture Decision Record (ADR)
+  ## 🔨 Architecture Decision Record (ADR)
 
-## 1. Arquitectura Base
-### Decisión
+### 1. Arquitectura Base
+
+#### Decisión
 - Implementación de Clean Architecture con CQRS
-### Contexto
+
+#### Contexto
 - Necesidad de una arquitectura escalable y mantenible para un sistema de gestión de inventario
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Clara separación de responsabilidades
   - Facilita el testing
@@ -390,12 +388,15 @@ graph TB
   - Mayor complejidad inicial
   - Más boilerplate code
 
-## 2. Patrón CQRS
-### Decisión
+### 2. Patrón CQRS
+
+#### Decisión
 - Separación de operaciones de lectura (Queries) y escritura (Commands) usando MediatR
-### Contexto
+
+#### Contexto
 - Necesidad de separar operaciones de lectura y escritura para mejor manejo de la lógica de negocio
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Mejor organización del código
   - Facilita la implementación de nuevas características
@@ -404,12 +405,15 @@ graph TB
   - Incrementa la complejidad para operaciones simples
   - Requiere más archivos y clases
 
-## 3. Base de Datos
-### Decisión
+### 3. Base de Datos
+
+#### Decisión
 - PostgreSQL con Entity Framework Core
-### Contexto
+
+#### Contexto
 - Necesidad de un sistema de base de datos robusto y confiable
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Base de datos relacional robusta y de código abierto
   - Buen soporte para operaciones CRUD
@@ -417,13 +421,16 @@ graph TB
 - **Negativas**:
   - Requiere mantenimiento y configuración del pool de conexiones
 
-## 4. API REST
-### Decisión
+### 4. API REST
+
+#### Decisión
 - API REST con ASP.NET Core
 - Documentación con Swagger/OpenAPI
-### Contexto
+
+#### Contexto
 - Necesidad de exponer endpoints para gestión de inventario, productos y tiendas
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - API bien documentada y fácil de consumir
   - Endpoints consistentes y RESTful
@@ -431,13 +438,16 @@ graph TB
 - **Negativas**:
   - Overhead de documentación
 
-## 5. Validación y Comportamientos
-### Decisión
+### 5. Validación y Comportamientos
+
+#### Decisión
 - Implementación de FluentValidation
 - Behaviors para logging y performance
-### Contexto
+
+#### Contexto
 - Necesidad de validación robusta y monitoreo de operaciones
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Validaciones consistentes y mantenibles
   - Monitoreo efectivo de performance
@@ -445,12 +455,15 @@ graph TB
 - **Negativas**:
   - Overhead en el pipeline de requests
 
-## 6. Infraestructura y Despliegue
-### Decisión
+### 6. Infraestructura y Despliegue
+
+#### Decisión
 - Despliegue en DigitalOcean App Platform
-### Contexto
+
+#### Contexto
 - Necesidad de una plataforma de despliegue simple, económica y efectiva
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Despliegue simplificado
   - Gestión automatizada de infraestructura
@@ -459,12 +472,15 @@ graph TB
   - Dependencia de un proveedor específico
   - Costos asociados al servicio
 
-## 7. Logging y Monitoreo
-### Decisión
+### 7. Logging y Monitoreo
+
+#### Decisión
 - Implementación de Serilog para logging
-### Contexto
+
+#### Contexto
 - Necesidad de registro y monitoreo de la aplicación
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Logging estructurado
   - Fácil integración con diferentes sinks
@@ -472,12 +488,15 @@ graph TB
 - **Negativas**:
   - Requiere gestión de almacenamiento de logs
 
-## 8. Seguridad
-### Decisión
+### 8. Seguridad
+
+#### Decisión
 - API sin autenticación (según requerimientos actuales)
-### Contexto
+
+#### Contexto
 - Sistema interno sin requerimientos iniciales de autenticación
-### Consecuencias
+
+#### Consecuencias
 - **Positivas**:
   - Simplicidad en la implementación
   - Menor overhead en requests
@@ -485,22 +504,21 @@ graph TB
   - Limitada protección de endpoints
   - Posible necesidad de implementación futura
 
+## 🔧 Patrones Implementados
 
-### Patrones Implementados
+### 1. CQRS (Command Query Responsibility Segregation)
+- Separación clara entre comandos y consultas
+- Mejor mantenibilidad y escalabilidad
 
-1. **CQRS (Command Query Responsibility Segregation)**
-   - Separación clara entre comandos y consultas
-   - Mejor mantenibilidad y escalabilidad
+### 2. Unit of Work & Repository
+- Gestión centralizada de transacciones
+- Abstracción de la capa de datos
 
-2. **Unit of Work & Repository**
-   - Gestión centralizada de transacciones
-   - Abstracción de la capa de datos
+### 3. Mediator (MediatR)
+- Desacoplamiento entre componentes
+- Pipeline de comportamientos
 
-3. **Mediator (MediatR)**
-   - Desacoplamiento entre componentes
-   - Pipeline de comportamientos
-
-### Tecnologías Principales
+## 🛠️ Tecnologías Principales
 
 - **Framework**: .NET 8
 - **ORM**: Entity Framework Core
@@ -508,7 +526,7 @@ graph TB
 - **Documentación API**: Swagger
 - **Testing**: xUnit, Moq
 
-### Manejo de Transacciones
+## 💾 Manejo de Transacciones
 
 Se implementó un sistema robusto de transacciones para garantizar la consistencia de datos:
 
@@ -525,8 +543,7 @@ public async Task<Result<bool>> Handle(TransferStockCommand request, Cancellatio
     catch
     {
         await _unitOfWork.RollbackTransactionAsync();
-        return Result<bool>.Failure("Error message");
+        return Result<bool>.Failure("Error durante la transferencia de stock");
     }
 }
 ```
-

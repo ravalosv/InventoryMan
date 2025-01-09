@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "50e3f8f6-67d2-4ee0-bf6b-06974a18617c",
+		"name": "InventoryMan Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23437382"
+	},
+	"item": [
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "update-stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": \"ELEC-CABL-001\",\r\n    \"storeId\": \"STR-01\",\r\n    \"quantity\": 10, \r\n    \"movementType\": \"IN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/inventory/update-stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"inventory",
+								"update-stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": \"ELEC-CABL-001\",\r\n    \"sourceStoreId\": \"STR-01\",\r\n    \"targetStoreId\": \"STR-02\",\r\n    \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/inventory/transfer",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"inventory",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/inventory/alerts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"inventory",
+								"alerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-min-stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": \"ELEC-CABL-001\",\r\n    \"storeId\": \"STR-01\",\r\n    \"minStock\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/inventory/update-min-stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"inventory",
+								"update-min-stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Id\": \"Product03\",\r\n  \"name\": \"Product03\",\r\n  \"description\": \"Descripcion Producto 03\",\r\n  \"categoryId\": 1,\r\n  \"price\": 4000,\r\n  \"sku\": \"SKU03\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/Products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/Products?PageNumber=1&pageSize=10&sortBy=name&sortDesc=True&category=fitness&maxPrice=90&minPrice=50",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Products"
+							],
+							"query": [
+								{
+									"key": "PageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "sortBy",
+									"value": "name"
+								},
+								{
+									"key": "sortDesc",
+									"value": "True"
+								},
+								{
+									"key": "category",
+									"value": "fitness"
+								},
+								{
+									"key": "maxPrice",
+									"value": "90"
+								},
+								{
+									"key": "minPrice",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/Products/ELEC-CABL-001",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Products",
+								"ELEC-CABL-001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"ELEC-CABL-001\",\r\n  \"name\": \"Product03\",\r\n  \"description\": \"Descripcion Producto 03\",\r\n  \"categoryId\": 1,\r\n  \"price\": 3000,\r\n  \"sku\": \"SKU009\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/Products/ELEC-CABL-001",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Products",
+								"ELEC-CABL-001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products/id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/Products/ELEC-AUDIO-001",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Products",
+								"ELEC-AUDIO-001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stores",
+			"item": [
+				{
+					"name": "Stores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/Stores/STR-01/inventory",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"Stores",
+								"STR-01",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test",
+			"item": [
+				{
+					"name": "Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tests/dbtest",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tests",
+								"dbtest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test-error",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tests/test-error",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tests",
+								"test-error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/tests/health",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"tests",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
