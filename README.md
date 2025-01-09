@@ -94,7 +94,7 @@ Update-Database
 
 1. Confirmar que Swagger se carga correctamente en `http://localhost:8080/swagger`
 2. Verificar que la base de datos contiene las tablas y datos iniciales
-3. Probar endpoint `GET /tests/dbtest`
+3. Probar endpoint `GET /api/tests/dbtest`
 > **✨ Resultado Esperado**: Swagger debe cargar correctamente y el endpoint de prueba debe retornar 200 OK y un mensaje "Database connection successfully established"
 
 #### Solución de Problemas Comunes
