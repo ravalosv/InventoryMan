@@ -37,14 +37,6 @@ cd InventoryMan
 
 - Instalar [PostgreSQL](https://www.postgresql.org/download/)
 - Crear una base de datos llamada `InventoryMan`
-- Dentro del proyecto InventoryMan.API, actualizar `appsettings.Development.json`:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=inventoryman;Username=tuusuario;Password=tupassword"
-  }
-}
-```
 
 3. Configuración en Visual Studio 2022
 - Abrir la solución `InventoryMan.sln`
@@ -55,6 +47,14 @@ dotnet restore
 ```
 
 4. Aplicar Migraciones
+- Dentro del proyecto InventoryMan.API, actualizar `appsettings.Development.json`:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Database=inventoryman;Username=tuusuario;Password=tupassword"
+  }
+}
+```
 - Abrir Package Manager Console (View -> Other Windows -> Package Manager Console)
 - Seleccionar `InventoryMan.Infrastructure` como Default project 
 - Ejecutar:
