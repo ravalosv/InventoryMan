@@ -222,7 +222,7 @@ docker image push [ruta Container Registry]/inventoryman-api:[tag de versión]
 #### Solución de Problemas Comunes
 
 - **Al ejecutar ´docker-compose build´ marca error**: Verificar que Docker Desktop se encuentre funcionando.
-- 
+
 #### Crear App en DigitalOcean
 
 1. Configuración Básica
