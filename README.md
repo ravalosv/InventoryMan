@@ -153,9 +153,8 @@ Hay dos opciones para configurar la base de datos:
 - Ubicación: Carpeta `Database_Scripts` en InventoryMan.Infrastructure
 - Ejecutar en orden:
   1. `01_CreateDatabase.sql`: Crea la base de datos y tablas
-  2. `02_Initial_Data.sql`: Datos iniciales necesarios
-  3. `03_Sample_Data.sql`: (Opcional) Datos de prueba
-> **Nota**: Solo ejecutar el script `03_Sample_Data.sql` si se desea información de prueba
+  2. `02_Sample_Data.sql`: (Opcional) Datos de prueba
+> **Nota**: Solo ejecutar el script `02_Sample_Data.sql.sql` si se desea información de prueba
 
 #### Connection Pool en DO
 
